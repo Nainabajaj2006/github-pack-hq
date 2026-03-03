@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naina's GitHub Pack HQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #222222;
+    --text: #f0f0f0;
+    --muted: #555;
+    --red: #ff3b3b;
+    --yellow: #f5c518;
+    --blue: #3b82f6;
+    --green: #22c55e;
+    --purple: #a855f7;
+    --pink: #ec4899;
+    --orange: #f97316;
+    --cyan: #06b6d4;
+
+    --tag-learn: #a855f7;
+    --tag-design: #ec4899;
+    --tag-host: #3b82f6;
+    --tag-pay: #22c55e;
+    --tag-security: #f97316;
+    --tag-productivity: #06b6d4;
+    --tag-dev: #f5c518;
+    --tag-domain: #ff3b3b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* LAYOUT */
+  .app { display: flex; height: 100vh; overflow: hidden; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 24px 16px;
+    gap: 8px;
+  }
+
+  .sidebar-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 0 8px 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .sidebar-logo span { color: var(--yellow); }
+
+  .sidebar-section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    padding: 8px 8px 4px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .sidebar-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    text-align: left;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sidebar-btn:hover { background: var(--surface2); color: var(--text); }
+  .sidebar-btn.active { background: var(--surface2); color: var(--text); }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* MAIN */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+  }
+
+  .search {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .search:focus { border-color: var(--yellow); }
+  .search::placeholder { color: var(--muted); }
+
+  .count-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* GRID */
+  .grid {
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent, var(--yellow));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .card:hover { border-color: #333; transform: translateY(-2px); }
+  .card:hover::before { opacity: 1; }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .card-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .card-emoji { font-size: 22px; }
+
+  .card-type {
+    display: inline-block;
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .card-duration { color: var(--muted); }
+
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--muted);
+  }
+  .status-dot.done { background: var(--green); }
+  .status-dot.progress { background: var(--yellow); }
+  .status-dot.not-started { background: var(--muted); }
+
+  /* URGENCY BADGE */
+  .urgency {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 9px;
+    font-family: 'Space Mono', monospace;
+    padding: 2px 6px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .urgency.now { background: rgba(255,59,59,0.15); color: var(--red); border: 1px solid rgba(255,59,59,0.3); }
+  .urgency.soon { background: rgba(245,197,24,0.15); color: var(--yellow); border: 1px solid rgba(245,197,24,0.3); }
+  .urgency.later { background: rgba(59,130,246,0.15); color: var(--blue); border: 1px solid rgba(59,130,246,0.3); }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 680px;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 32px;
+    position: relative;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .modal-close:hover { color: var(--text); border-color: #444; }
+
+  .modal-header { margin-bottom: 24px; }
+  .modal-emoji { font-size: 36px; margin-bottom: 12px; }
+  .modal-name { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+  .modal-tagline { color: #888; font-size: 14px; line-height: 1.5; }
+
+  .modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .info-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .info-block-label {
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .info-block-value {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .full-width { grid-column: 1 / -1; }
+
+  /* NOTES */
+  .section-title {
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+
+  .notes-area {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    resize: vertical;
+    min-height: 120px;
+    outline: none;
+    transition: border 0.2s;
+    line-height: 1.6;
+  }
+  .notes-area:focus { border-color: var(--yellow); }
+  .notes-area::placeholder { color: var(--muted); }
+
+  /* LINKS */
+  .link-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+  .link-input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .link-input:focus { border-color: var(--yellow); }
+  .link-input::placeholder { color: var(--muted); }
+
+  .btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn:hover { border-color: #444; background: #222; }
+  .btn.primary { background: var(--yellow); color: #000; border-color: var(--yellow); font-weight: 700; }
+  .btn.primary:hover { background: #e6b800; }
+  .btn.danger { color: var(--red); border-color: rgba(255,59,59,0.3); }
+  .btn.danger:hover { background: rgba(255,59,59,0.1); }
+  .btn.small { padding: 6px 10px; font-size: 11px; }
+
+  .saved-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+  }
+  .saved-link a {
+    flex: 1;
+    color: var(--blue);
+    text-decoration: none;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .saved-link a:hover { text-decoration: underline; }
+  .saved-link .link-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-right: 4px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .status-select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .save-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    align-items: center;
+  }
+
+  .save-msg {
+    font-size: 12px;
+    color: var(--green);
+    font-family: 'Space Mono', monospace;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .save-msg.show { opacity: 1; }
+
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    gap: 12px;
+  }
+
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid var(--border);
+    border-top-color: var(--yellow);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Naina's<br><span>GitHub Pack HQ</span></div>
+
+    <div class="sidebar-section-label">Urgency</div>
+    <button class="sidebar-btn active" onclick="filterBy('all', this)">
+      <div class="dot" style="background:#555"></div> All Tools
+    </button>
+    <button class="sidebar-btn" onclick="filterBy('now', this)">
+      <div class="dot" style="background:var(--red)"></div> Redeem Now
+    </button>
+    <button class="sidebar-btn" onclick="filterBy('soon', this)">
+      <div class="dot" style="background:var(--yellow)"></div> Redeem Soon
+    </button>
+    <button class="sidebar-btn" onclick="filterBy('later', this)">
+      <div class="dot" style="background:var(--blue)"></div> Redeem Later
+    </button>
+
+    <div class="sidebar-section-label" style="margin-top:12px">Category</div>
+    <button class="sidebar-btn" onclick="filterBy('Learning', this)">
+      <div class="dot" style="background:var(--purple)"></div> Learning
+    </button>
+    <button class="sidebar-btn" onclick="filterBy('Design', this)">
+      <div class="dot" style="background:var(--pink)"></div> Design
+    </button>
+    <button class="sidebar-btn" onclick="filterBy('Hosting', this)">
+      <div class="dot" style="background:var(--blue)"></div> Hosting
+    </button>
+    <button class="sidebar-btn" onclick="filterBy('Payments', this)">
+      <div class="dot" style="background:var(--green)"></div> Payments
+    </button>
+    <button class="sidebar-btn" onclick="filterBy('Security', this)">
+      <div class="dot" style="background:var(--orange)"></div> Security
+    </button>
+    <button class="sidebar-btn" onclick="filterBy('Productivity', this)">
+      <div class="dot" style="background:var(--cyan)"></div> Productivity
+    </button>
+    <button class="sidebar-btn" onclick="filterBy('Dev Tools', this)">
+      <div class="dot" style="background:var(--yellow)"></div> Dev Tools
+    </button>
+    <button class="sidebar-btn" onclick="filterBy('Domain', this)">
+      <div class="dot" style="background:var(--red)"></div> Domain
+    </button>
+
+    <div class="sidebar-section-label" style="margin-top:12px">Status</div>
+    <button class="sidebar-btn" onclick="filterBy('Not Started', this)">
+      <div class="dot" style="background:var(--muted)"></div> Not Started
+    </button>
+    <button class="sidebar-btn" onclick="filterBy('In Progress', this)">
+      <div class="dot" style="background:var(--yellow)"></div> In Progress
+    </button>
+    <button class="sidebar-btn" onclick="filterBy('Done', this)">
+      <div class="dot" style="background:var(--green)"></div> Done
+    </button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <input class="search" type="text" placeholder="Search tools..." oninput="searchTools(this.value)" />
+      <span class="count-badge" id="countBadge">-- tools</span>
+    </div>
+    <div class="grid" id="grid">
+      <div class="loading"><div class="spinner"></div> Loading your pack...</div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    <div class="modal-header">
+      <div class="modal-emoji" id="mEmoji"></div>
+      <div class="modal-name" id="mName"></div>
+      <div class="modal-tagline" id="mTagline"></div>
+    </div>
+
+    <div class="modal-grid" id="mGrid"></div>
+
+    <div class="section-title">📝 Your Notes</div>
+    <textarea class="notes-area" id="mNotes" placeholder="Type your notes, learnings, thoughts here..."></textarea>
+
+    <div class="section-title">🔗 Documents & Links</div>
+    <div id="savedLinks"></div>
+    <div class="link-row">
+      <input class="link-input" id="linkLabel" placeholder="Label (e.g. Week 1 notes)" style="max-width:180px" />
+      <input class="link-input" id="linkUrl" placeholder="Paste link here" />
+      <button class="btn small" onclick="addLink()">+ Add</button>
+    </div>
+
+    <div class="section-title">📌 Status</div>
+    <select class="status-select" id="mStatus">
+      <option value="Not Started">⚪ Not Started</option>
+      <option value="In Progress">🟡 In Progress</option>
+      <option value="Done">🟢 Done</option>
+    </select>
+
+    <div class="save-row">
+      <button class="btn primary" onclick="saveData()">Save</button>
+      <span class="save-msg" id="saveMsg">✓ Saved!</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────
+const PROJECT_ID = '69a7448a002fc5074132';
+const DATABASE_ID = '69a74521003636c06877';
+const COLLECTION_ID = 'notesdashboardgithubnaina';
+const APPWRITE_URL = 'https://cloud.appwrite.io/v1';
+
+// ── ALL TOOLS DATA ───────────────────────────────────────
+const tools = [
+  {
+    id: 'notion', name: 'Notion', emoji: '📋', type: 'Productivity',
+    urgency: 'now', color: 'var(--cyan)',
+    duration: 'Free while student',
+    tagline: 'Your all-in-one work organiser',
+    baby: 'Like Google Docs + Sheets combined but prettier. Use it to manage clients, plan content, and send proposals.',
+    prereqs: 'None — zero experience needed',
+    learn: 'How to organise your work, manage clients, build systems',
+    after: 'You can manage multiple clients professionally without anything slipping through the cracks',
+    redeem: 'Go to notion.so → Sign up with your GitHub/student email → Apply student plan'
+  },
+  {
+    id: 'namecheap', name: 'Namecheap', emoji: '🌐', type: 'Domain',
+    urgency: 'now', color: 'var(--red)',
+    duration: '1 year free',
+    tagline: 'Get a professional domain (nainabajaj.com)',
+    baby: 'Websites have addresses like google.com. Namecheap is where you buy yours. Free for 1 year — makes you look pro to clients.',
+    prereqs: 'None',
+    learn: 'How to own and manage a domain',
+    after: 'Your portfolio becomes nainabajaj.com instead of the github.io link — instantly more professional',
+    redeem: 'education.github.com/pack → find Namecheap → click Get access → use your GitHub student account'
+  },
+  {
+    id: 'name-com', name: 'Name.com', emoji: '🔗', type: 'Domain',
+    urgency: 'now', color: 'var(--red)',
+    duration: '1 year free',
+    tagline: 'Second free domain option (.live, .studio, .app)',
+    baby: 'Same as Namecheap but different domain endings. You get .me from Namecheap and options like .live or .studio from here. Use one for India, one for global.',
+    prereqs: 'None',
+    learn: 'Domain management',
+    after: 'Two professional domains — one for each of your portfolios',
+    redeem: 'education.github.com/pack → find Name.com → connect GitHub account'
+  },
+  {
+    id: 'stripe', name: 'Stripe', emoji: '💳', type: 'Payments',
+    urgency: 'now', color: 'var(--green)',
+    duration: 'Waived fees on first $1000',
+    tagline: 'Get paid by international clients in dollars',
+    baby: 'When a US or European client wants to pay you — they can\'t use GPay. Stripe lets them pay by card in dollars, straight to your account. First $1000 earned has zero fees.',
+    prereqs: 'None',
+    learn: 'How to accept international payments professionally',
+    after: 'You can actually receive money from global clients. Your $299–$999 packages become real.',
+    redeem: 'stripe.com → create account → verify as student via GitHub pack for fee waiver'
+  },
+  {
+    id: 'icons8', name: 'Icons8', emoji: '🎨', type: 'Design',
+    urgency: 'now', color: 'var(--pink)',
+    duration: '3 months free',
+    tagline: 'Millions of free icons, photos, and illustrations',
+    baby: 'When making posts you need images. Icons8 gives you millions of icons and photos — all free to use, no copyright issues. Way better than Googling random images.',
+    prereqs: 'None',
+    learn: 'Finding and using professional visuals',
+    after: 'Your posts and proposals look polished and professional instead of generic',
+    redeem: 'Redeem when you\'re ready to start using it — clock starts on activation'
+  },
+  {
+    id: 'iconscout', name: 'IconScout', emoji: '✨', type: 'Design',
+    urgency: 'now', color: 'var(--pink)',
+    duration: '60 free icons/month for 1 year',
+    tagline: '4.9 million icons, 3D images and animations',
+    baby: 'Same as Icons8 but bigger — 4.9 million visuals including 3D and animated ones. Between Icons8 and IconScout you basically have unlimited free professional visuals.',
+    prereqs: 'None',
+    learn: 'Using premium design assets',
+    after: 'Everything you create looks premium — posts, proposals, website, client reports',
+    redeem: 'education.github.com/pack → find IconScout → activate'
+  },
+  {
+    id: 'visme', name: 'Visme', emoji: '📊', type: 'Design',
+    urgency: 'now', color: 'var(--pink)',
+    duration: '3 months free',
+    tagline: 'Beautiful presentations and client reports',
+    baby: 'Like PowerPoint but way more beautiful. Make pitch decks to send clients, weekly reports showing their LinkedIn numbers, proposals when they ask what you\'ll do for them.',
+    prereqs: 'None',
+    learn: 'Creating professional presentations and reports',
+    after: 'When clients ask for a proposal you send something so clean they think you\'ve been doing this for years',
+    redeem: 'Redeem when you have your first client conversation lined up'
+  },
+  {
+    id: '1password', name: '1Password', emoji: '🔐', type: 'Security',
+    urgency: 'now', color: 'var(--orange)',
+    duration: '1 year free',
+    tagline: 'Secure locker for all your clients\' passwords',
+    baby: 'You manage someone\'s LinkedIn — that means you know their password. 1Password stores all credentials safely. You can tell clients "I use 1Password to keep your info secure" — instant trust.',
+    prereqs: 'None',
+    learn: 'Professional credential management',
+    after: 'You look more trustworthy than every other freelancer. Clients feel safe giving you access.',
+    redeem: 'education.github.com/pack → find 1Password → activate now, you need this immediately'
+  },
+  {
+    id: 'github-pages', name: 'GitHub Pages', emoji: '🌍', type: 'Hosting',
+    urgency: 'now', color: 'var(--blue)',
+    duration: 'Free forever (student)',
+    tagline: 'Free hosting for your portfolio — already using this!',
+    baby: 'This is where your portfolio lives right now. Free land from GitHub. You can host unlimited project sites here. You\'re already using it — nothing to set up.',
+    prereqs: 'Already done!',
+    learn: 'Website hosting, deploying changes',
+    after: 'Host this dashboard and all future projects for free',
+    redeem: 'Already active — you\'re using it!'
+  },
+  {
+    id: 'github-copilot', name: 'GitHub Copilot', emoji: '🤖', type: 'Dev Tools',
+    urgency: 'soon', color: 'var(--yellow)',
+    duration: 'Free while student',
+    tagline: 'AI autocomplete for coding — like WhatsApp suggestions for code',
+    baby: 'When you\'re learning to code, Copilot sits next to you and suggests what to type next. Like a really smart autocomplete. Cuts your learning time in half because you\'re never stuck.',
+    prereqs: 'Start learning to code first (Codedex or Scrimba), then activate this',
+    learn: 'AI-assisted coding',
+    after: 'You code faster, get stuck less, learn more efficiently',
+    redeem: 'Activate AFTER you start a coding course — don\'t waste it sitting idle'
+  },
+  {
+    id: 'github-cert', name: 'GitHub Certification', emoji: '🏆', type: 'Dev Tools',
+    urgency: 'now', color: 'var(--yellow)',
+    duration: '1 free exam (expires June 30 2026)',
+    tagline: 'Real credential for your LinkedIn — worth ₹8,000',
+    baby: 'Like having a degree but for GitHub skills. Get the GitHub Foundations cert — proves you know how to use GitHub. Put it on your LinkedIn and portfolio. Makes you look way more legitimate.',
+    prereqs: 'Basic GitHub usage (you\'re already doing this)',
+    learn: 'GitHub fundamentals, version control',
+    after: 'A real certified credential on your LinkedIn — stands out to clients',
+    redeem: '⚠️ EXPIRES JUNE 30 2026 — do this soon! education.github.com/pack → GitHub Certification'
+  },
+  {
+    id: 'datacamp', name: 'DataCamp', emoji: '📈', type: 'Learning',
+    urgency: 'soon', color: 'var(--purple)',
+    duration: '3 months free',
+    tagline: 'Learn data skills — go from ₹18k to ₹35k per client',
+    baby: 'Like YouTube but for learning data skills. Interactive — you practice while you learn. Teaches you to analyse data, make charts, and basic Python. Adds a whole new skill you can charge for.',
+    prereqs: 'Basic Excel (you already have this)',
+    learn: 'Data analysis, Python basics, making dashboards and charts',
+    after: 'You can offer "data + strategy" not just content. Charge way more for the same client.',
+    redeem: 'Activate only when you\'re ready to start — 3 months goes fast'
+  },
+  {
+    id: 'codedex', name: 'Codedex', emoji: '🎮', type: 'Learning',
+    urgency: 'soon', color: 'var(--purple)',
+    duration: '6 months free',
+    tagline: 'Learn to code — feels like a game, made for Gen Z',
+    baby: 'Same as FrontendMasters but made specifically for people your age. Feels like a game not a boring textbook. Start with Python or HTML. Perfect for absolute beginners.',
+    prereqs: 'Zero — built for people who\'ve never touched code',
+    learn: 'Python, JavaScript, HTML, CSS, React',
+    after: 'You can build basic websites and tools — opens up new income streams',
+    redeem: 'Pick ONE: Codedex, Scrimba, FrontendMasters, or Educative — don\'t activate all 4'
+  },
+  {
+    id: 'scrimba', name: 'Scrimba', emoji: '💻', type: 'Learning',
+    urgency: 'soon', color: 'var(--purple)',
+    duration: '1 month free',
+    tagline: 'Interactive coding — type code directly inside the video',
+    baby: 'Like watching a cooking video and being able to reach in and cook along in real time. You code directly inside the lesson video. Most hands-on way to learn. Only 1 month so use it intensively.',
+    prereqs: 'None',
+    learn: 'JavaScript, CSS, React, Python',
+    after: 'Hands-on coding skills in 1 month if you go hard',
+    redeem: 'Only 1 month — save for when you can go all in for that month'
+  },
+  {
+    id: 'frontendmasters', name: 'FrontendMasters', emoji: '🏗️', type: 'Learning',
+    urgency: 'soon', color: 'var(--purple)',
+    duration: '6 months free (worth $390)',
+    tagline: 'Build websites — charge ₹15k–₹30k extra per client',
+    baby: 'Video lessons teaching you to build websites from scratch. If a client asks "can you build me a landing page?" — you say yes and charge extra. Also makes your own portfolio way more premium.',
+    prereqs: 'None — starts from basics',
+    learn: 'Web development, JavaScript, building real websites',
+    after: 'Offer website building as an extra service. Charge ₹15k–₹30k per page.',
+    redeem: 'Pick ONE learning platform to start with — activate when ready'
+  },
+  {
+    id: 'educative', name: 'Educative', emoji: '📚', type: 'Learning',
+    urgency: 'soon', color: 'var(--purple)',
+    duration: '6 months free',
+    tagline: '70+ interactive courses — read and practice in one place',
+    baby: 'Interactive textbooks where you read then immediately practice right there on the page. 70+ courses covering web dev, Python, ML. More structured than video courses.',
+    prereqs: 'None',
+    learn: 'Web development, Python, machine learning basics',
+    after: 'Structured understanding of coding concepts you can apply to real work',
+    redeem: 'Pick ONE learning platform — only activate when starting'
+  },
+  {
+    id: 'gorails', name: 'GoRails', emoji: '🛤️', type: 'Learning',
+    urgency: 'later', color: 'var(--purple)',
+    duration: '12 months free (longest of any platform)',
+    tagline: 'Build real web apps fast with Ruby on Rails',
+    baby: 'Teaches you to build actual working web applications really fast. Not just learning theory — building stuff that works. 12 months is the longest free period of any course in your pack.',
+    prereqs: 'Basic HTML/CSS first',
+    learn: 'Ruby on Rails, building full web applications',
+    after: 'Build and sell web apps and tools — significantly higher income potential',
+    redeem: 'After you have basics from another course first'
+  },
+  {
+    id: 'bootstrap-studio', name: 'Bootstrap Studio', emoji: '🧱', type: 'Dev Tools',
+    urgency: 'soon', color: 'var(--yellow)',
+    duration: 'Free while student',
+    tagline: 'Build websites by drag and drop — like Lego',
+    baby: 'Instead of writing all the code from scratch you drag and drop pieces together. Build a full professional website without knowing much code at all. Great starting point.',
+    prereqs: 'None',
+    learn: 'Visual web design, basic HTML/CSS',
+    after: 'Build clean portfolio websites for yourself and clients without deep coding knowledge',
+    redeem: 'education.github.com/pack → Bootstrap Studio'
+  },
+  {
+    id: 'jetbrains', name: 'JetBrains', emoji: '⚡', type: 'Dev Tools',
+    urgency: 'later', color: 'var(--yellow)',
+    duration: 'Free while student (renewed yearly)',
+    tagline: 'Professional code editor — what big company devs use',
+    baby: 'Like Microsoft Word but for writing code. JetBrains is the fancy professional version. Has tools for Python, JavaScript and more. Worth ₹8,000/year — free for you the whole degree.',
+    prereqs: 'Learn basics with VS Code first',
+    learn: 'Professional coding environment',
+    after: 'Code like a professional developer',
+    redeem: 'After you\'re comfortable with VS Code basics'
+  },
+  {
+    id: 'digitalocean', name: 'DigitalOcean', emoji: '🌊', type: 'Hosting',
+    urgency: 'later', color: 'var(--blue)',
+    duration: '$200 credit (≈₹16,000)',
+    tagline: 'Your own server space — host anything you build',
+    baby: 'For your website to be on the internet it needs to be stored somewhere. DigitalOcean rents you that space. When you build something — a tool, an app — this is where you put it. ₹16k credit for free.',
+    prereqs: 'Have something to host first',
+    learn: 'Server management, deploying applications',
+    after: 'Put anything you build on the internet for the world to use',
+    redeem: 'Only when you have something ready to deploy'
+  },
+  {
+    id: 'azure', name: 'Microsoft Azure', emoji: '☁️', type: 'Hosting',
+    urgency: 'later', color: 'var(--blue)',
+    duration: '$100 credit (≈₹8,000)',
+    tagline: 'Microsoft\'s cloud — access AI tools and automation',
+    baby: 'Like DigitalOcean but made by Microsoft. Has extra AI tools. Imagine automating some of your manual work — writing posts, tracking numbers, doing outreach. Azure lets you eventually do that.',
+    prereqs: 'Have a project that needs cloud/AI features',
+    learn: 'Cloud computing, AI APIs, automation',
+    after: 'Automate parts of your work — handle more clients without working more hours',
+    redeem: 'Only when you have a specific project needing it'
+  },
+  {
+    id: 'appwrite', name: 'Appwrite', emoji: '🔧', type: 'Hosting',
+    urgency: 'now', color: 'var(--blue)',
+    duration: 'Free your entire degree (worth $160/month)',
+    tagline: 'Complete backend kit — what powers this very dashboard',
+    baby: 'All-in-one kit for building apps. Stores data, handles user accounts, everything in one place. This dashboard uses Appwrite to save your notes across all devices. Free your entire degree.',
+    prereqs: 'Already set up for this dashboard!',
+    learn: 'Backend development, databases, user management',
+    after: 'Build real apps that save data, have users, work across devices',
+    redeem: 'Already redeemed and active!'
+  },
+  {
+    id: 'heroku', name: 'Heroku', emoji: '🚂', type: 'Hosting',
+    urgency: 'later', color: 'var(--blue)',
+    duration: '$13/month for 24 months (≈₹26,000 total)',
+    tagline: 'Beginner-friendly server — furnished apartment vs empty house',
+    baby: 'DigitalOcean = building your own house from scratch. Heroku = moving into a furnished apartment. Everything already set up, just move your stuff in. Easier starting point for hosting.',
+    prereqs: 'Have something to deploy',
+    learn: 'Deploying apps the easy way',
+    after: 'Get your projects live on the internet without complicated setup',
+    redeem: 'When you have a project ready to deploy'
+  },
+  {
+    id: 'mongodb', name: 'MongoDB', emoji: '🍃', type: 'Hosting',
+    urgency: 'later', color: 'var(--blue)',
+    duration: '$50 credit + free courses',
+    tagline: 'Database for websites and apps',
+    baby: 'Excel stores data in rows and columns. MongoDB does the same but for apps. When you build something that needs to remember information — who logged in, what their stats are — MongoDB stores all of it.',
+    prereqs: 'Start building an app first',
+    learn: 'Database management, storing and retrieving data',
+    after: 'Build apps that remember things — user data, content, stats',
+    redeem: 'Only when you\'re building something that needs a database'
+  },
+  {
+    id: 'simple-analytics', name: 'SimpleAnalytics', emoji: '📉', type: 'Productivity',
+    urgency: 'now', color: 'var(--cyan)',
+    duration: '1 year free',
+    tagline: 'See who\'s actually visiting your portfolio',
+    baby: 'When you send your portfolio link to potential clients you have no idea if they actually visited it. SimpleAnalytics tells you exactly how many people visited, where they came from, and what they looked at.',
+    prereqs: 'None',
+    learn: 'Website analytics, understanding your audience',
+    after: 'You can see which outreach is working — who clicked your link and who didn\'t',
+    redeem: 'education.github.com/pack → SimpleAnalytics'
+  },
+  {
+    id: 'pomodone', name: 'PomoDone', emoji: '⏱️', type: 'Productivity',
+    urgency: 'now', color: 'var(--cyan)',
+    duration: '2 years free',
+    tagline: 'Focus timer for juggling college + internship + business',
+    baby: 'Work 25 mins, break 5 mins, repeat. It\'s proven to help you focus without burning out. PomoDone runs that timer and tracks how many hours you actually worked each day.',
+    prereqs: 'None',
+    learn: 'Time management, productive work habits',
+    after: 'You actually know how many hours you worked. No more feeling busy but getting nothing done.',
+    redeem: 'education.github.com/pack → PomoDone'
+  },
+  {
+    id: 'slidecoach', name: 'SlideCoach', emoji: '🎤', type: 'Productivity',
+    urgency: 'now', color: 'var(--cyan)',
+    duration: '2000 credits free (40 sessions)',
+    tagline: 'AI coach for pitching to clients — practice before the real call',
+    baby: 'You\'re going to pitch to potential clients on calls. SlideCoach is an AI you practice with first. Present to it, it watches you, then tells you what to improve — pacing, filler words, energy.',
+    prereqs: 'None',
+    learn: 'Presentation skills, pitching, public speaking confidence',
+    after: 'You go into client calls having already practiced. You sound confident and prepared.',
+    redeem: 'Before your first client call — use all 40 sessions'
+  },
+  {
+    id: 'dailybot', name: 'DailyBot', emoji: '🤝', type: 'Productivity',
+    urgency: 'later', color: 'var(--cyan)',
+    duration: '6 months free (up to 10 users)',
+    tagline: 'Auto-update your clients so you never forget',
+    baby: 'When you have multiple clients you need to update each one regularly. DailyBot sends automatic update messages to clients on a schedule. As you grow from 1 to 5 clients — this saves hours.',
+    prereqs: 'Have at least 2-3 clients first',
+    learn: 'Client communication automation',
+    after: 'Every client always feels updated. You never drop the ball on communication.',
+    redeem: 'Once you have 2+ clients'
+  },
+  {
+    id: 'zyte', name: 'Zyte', emoji: '🕷️', type: 'Dev Tools',
+    urgency: 'later', color: 'var(--yellow)',
+    duration: 'Free forever',
+    tagline: 'Auto-collect lead lists — robot that browses the internet for you',
+    baby: 'Want a list of 500 Indian D2C founders to pitch to? Instead of manually searching each one, Zyte does it automatically. It\'s a robot that collects info from the internet. Lead lists are worth money.',
+    prereqs: 'Basic Python first',
+    learn: 'Web scraping, lead generation, data collection',
+    after: 'Sell lead lists to businesses, supercharge your own outreach',
+    redeem: 'After learning basic Python'
+  },
+  {
+    id: 'popsql', name: 'PopSQL', emoji: '🔢', type: 'Dev Tools',
+    urgency: 'later', color: 'var(--yellow)',
+    duration: 'Free while student',
+    tagline: 'Work with big data in a clean, beautiful interface',
+    baby: 'SQL is a language for working with massive amounts of data — like Excel but for millions of rows. PopSQL is a beautiful app for writing SQL. If you learn SQL from DataCamp, you use it here professionally.',
+    prereqs: 'DataCamp SQL course first',
+    learn: 'SQL, working with large datasets',
+    after: 'Handle serious data projects for clients — command premium rates',
+    redeem: 'After completing DataCamp SQL modules'
+  },
+  {
+    id: 'deepnote', name: 'Deepnote', emoji: '📓', type: 'Dev Tools',
+    urgency: 'later', color: 'var(--yellow)',
+    duration: 'Free while student',
+    tagline: 'Notebook that mixes writing, data and code — impress clients',
+    baby: 'Like a Google Doc where you can also run code and show charts right inside it. Instead of sending clients a boring Excel file you send them a beautiful interactive document that tells a story with data.',
+    prereqs: 'Basic Python or SQL first',
+    learn: 'Data storytelling, presenting findings visually',
+    after: 'Deliver client reports that look incredibly professional — makes you stand out',
+    redeem: 'After learning Python or SQL basics'
+  },
+  {
+    id: 'imgbot', name: 'Imgbot', emoji: '🖼️', type: 'Dev Tools',
+    urgency: 'now', color: 'var(--yellow)',
+    duration: 'Free while student',
+    tagline: 'Auto-shrink images so your website loads faster',
+    baby: 'Images on your portfolio can make it load slowly. Imgbot automatically shrinks them to perfect size without making them look worse. Runs in background automatically — you do nothing.',
+    prereqs: 'Have a GitHub repository with images (you do)',
+    learn: 'Image optimisation (automatic)',
+    after: 'Portfolio loads faster, looks better, ranks higher on Google',
+    redeem: 'education.github.com/pack → Imgbot — activate now'
+  },
+  {
+    id: 'pageclip', name: 'Pageclip', emoji: '📬', type: 'Dev Tools',
+    urgency: 'soon', color: 'var(--yellow)',
+    duration: 'Free while student',
+    tagline: 'Make your contact form actually send you messages',
+    baby: 'On your portfolio someone fills in "contact me" — but does it actually send you anything? Pageclip makes that work properly. Someone submits the form, you get their message. No code needed.',
+    prereqs: 'Have a portfolio with a contact form',
+    learn: 'Form handling for websites',
+    after: 'Potential clients can actually reach you through your website',
+    redeem: 'When updating your portfolio'
+  },
+  {
+    id: 'browserstack', name: 'BrowserStack', emoji: '📱', type: 'Dev Tools',
+    urgency: 'later', color: 'var(--yellow)',
+    duration: '1 year free',
+    tagline: 'Test your website on 2000+ devices without owning them',
+    baby: 'When you build a website you need it to look good on every phone, laptop, and browser. BrowserStack gives you access to 2000+ real devices online. Paste your link and see how it looks anywhere.',
+    prereqs: 'Start building websites first',
+    learn: 'Cross-device testing, quality assurance',
+    after: 'Websites you build work perfectly on every device — no embarrassing broken layouts',
+    redeem: 'Once you start building websites for clients'
+  },
+  {
+    id: 'astra', name: 'AstraSecurity', emoji: '🛡️', type: 'Security',
+    urgency: 'later', color: 'var(--orange)',
+    duration: '6 months free',
+    tagline: 'Security guard for your website — blocks hackers',
+    baby: 'Scans your website for viruses and blocks hackers. When you host things for clients you can say "your website is protected by AstraSecurity" — sounds very professional and builds trust.',
+    prereqs: 'Have a website to protect',
+    learn: 'Basic cybersecurity, website protection',
+    after: 'Clients trust you more. You can offer "secured hosting" as part of your package.',
+    redeem: 'When you start hosting websites for clients'
+  },
+  {
+    id: 'honeybadger', name: 'Honeybadger', emoji: '🍯', type: 'Security',
+    urgency: 'later', color: 'var(--orange)',
+    duration: '1 year free',
+    tagline: 'Alarm bell that tells you when something breaks',
+    baby: 'If something on your website breaks at 2am, Honeybadger immediately emails you. You fix it before your client even notices. Catching problems before your clients do is everything.',
+    prereqs: 'Have a website or app running',
+    learn: 'Error monitoring, uptime management',
+    after: 'You look incredibly professional — problems get fixed before clients notice',
+    redeem: 'When running live websites for clients'
+  },
+  {
+    id: 'sentry', name: 'Sentry', emoji: '🔍', type: 'Security',
+    urgency: 'later', color: 'var(--orange)',
+    duration: '1 year free',
+    tagline: 'Full investigation report when something breaks',
+    baby: 'Like Honeybadger but more detailed. Doesn\'t just say "something broke" — tells you exactly WHAT broke, WHERE, and WHY. Honeybadger = alarm bell. Sentry = full investigation report. Pick one.',
+    prereqs: 'Have a website or app running',
+    learn: 'Advanced error tracking and debugging',
+    after: 'Fix bugs faster, keep clients happier, look super professional',
+    redeem: 'When running live projects — pick either Sentry OR Honeybadger, not both'
+  },
+  {
+    id: 'dashlane', name: 'Dashlane', emoji: '🗝️', type: 'Security',
+    urgency: 'later', color: 'var(--orange)',
+    duration: '6 months free',
+    tagline: 'Backup password manager (use 1Password instead)',
+    baby: 'Same as 1Password — stores passwords securely. You already have 1Password from this pack. You only need one password manager. Dashlane is a backup option if 1Password doesn\'t work for some reason.',
+    prereqs: 'Already using 1Password',
+    learn: 'Password security',
+    after: 'Backup option — stick with 1Password',
+    redeem: 'Only if 1Password doesn\'t work for you'
+  },
+  {
+    id: 'testmail', name: 'Testmail', emoji: '✉️', type: 'Productivity',
+    urgency: 'soon', color: 'var(--cyan)',
+    duration: 'Free while student',
+    tagline: 'Test your outreach emails before sending to real clients',
+    baby: 'When doing outreach you want to see exactly how your email looks in someone\'s inbox before hitting send. Testmail gives you unlimited test addresses to send to first. No more sending broken emails to clients.',
+    prereqs: 'Start doing email outreach',
+    learn: 'Email deliverability, professional communication',
+    after: 'Every email you send to a real client looks perfect',
+    redeem: 'When you start doing email outreach campaigns'
+  },
+  {
+    id: 'tower', name: 'Tower', emoji: '🗼', type: 'Dev Tools',
+    urgency: 'later', color: 'var(--yellow)',
+    duration: 'Free while student',
+    tagline: 'Advanced version of GitHub Desktop — for complex projects',
+    baby: 'Remember GitHub Desktop — the app that makes saving and updating your website easy? Tower is the most advanced version. Use when you\'re managing multiple complex projects. You don\'t need it yet.',
+    prereqs: 'Comfortable with GitHub Desktop first',
+    learn: 'Advanced version control',
+    after: 'Manage complex multi-project development professionally',
+    redeem: 'After you outgrow GitHub Desktop'
+  },
+  {
+    id: 'xojo', name: 'Xojo', emoji: '🖥️', type: 'Dev Tools',
+    urgency: 'later', color: 'var(--yellow)',
+    duration: 'Free while student',
+    tagline: 'Build desktop and mobile apps visually',
+    baby: 'Like Bootstrap Studio (websites by drag and drop) but for building actual desktop apps and mobile apps. Build a proper app someone downloads without needing deep coding knowledge.',
+    prereqs: 'Basic coding concepts first',
+    learn: 'Building desktop and mobile applications',
+    after: 'Build and sell downloadable apps — significantly higher value products',
+    redeem: 'After you have basic coding foundations'
+  },
+  {
+    id: 'algoexpert', name: 'AlgoExpert', emoji: '🧠', type: 'Learning',
+    urgency: 'later', color: 'var(--purple)',
+    duration: '20 free questions + 10% discount',
+    tagline: 'Prep for tech job interviews',
+    baby: 'If you ever apply for a proper tech job or internship they make you solve coding problems in interviews. AlgoExpert prepares you for that. Not urgent right now — for when you want to level up to a tech role.',
+    prereqs: 'Solid coding foundations first',
+    learn: 'Coding interview problems, algorithmic thinking',
+    after: 'Qualify for better-paid tech internships and jobs',
+    redeem: 'When actively job hunting for tech roles'
+  },
+  {
+    id: 'localstack', name: 'LocalStack', emoji: '🏠', type: 'Dev Tools',
+    urgency: 'later', color: 'var(--yellow)',
+    duration: 'Free with pack',
+    tagline: 'Fake server on your laptop — test for free before going live',
+    baby: 'Normally to test something you\'d upload it to a real server which costs money. LocalStack creates a fake version of that server on your own laptop. Test everything for free before touching the real thing.',
+    prereqs: 'Start building something that needs a server',
+    learn: 'Local development, cloud simulation',
+    after: 'Save money while building — test everything locally first',
+    redeem: 'When building projects that need cloud services'
+  },
+  {
+    id: 'datadog', name: 'Datadog', emoji: '🐕', type: 'Security',
+    urgency: 'later', color: 'var(--orange)',
+    duration: '2 years free',
+    tagline: 'Security camera for your website — watches 24/7',
+    baby: 'If you build something and people use it — how do you know it\'s working at 3am? Datadog watches everything 24/7 and tells you if anything goes wrong. Like a security camera but for your website.',
+    prereqs: 'Have something live that people are using',
+    learn: 'Infrastructure monitoring, performance tracking',
+    after: 'Know immediately when anything goes wrong — before your users do',
+    redeem: 'When running live projects with real users'
+  },
+  {
+    id: 'new-relic', name: 'New Relic', emoji: '📡', type: 'Security',
+    urgency: 'later', color: 'var(--orange)',
+    duration: 'Free while student (worth $300/month)',
+    tagline: 'Most comprehensive monitoring — tracks everything',
+    baby: 'Like Datadog but more comprehensive. Tracks speed, errors, visitors, how long pages take to load — everything in one dashboard. Worth $300/month (₹25k) — you get it free. Use when running serious projects.',
+    prereqs: 'Have live projects with real traffic',
+    learn: 'Full-stack observability',
+    after: 'Complete visibility into how your projects perform — make data-driven improvements',
+    redeem: 'When running multiple live projects'
+  },
+  {
+    id: 'polypane', name: 'Polypane', emoji: '🪟', type: 'Dev Tools',
+    urgency: 'later', color: 'var(--yellow)',
+    duration: '1 year free',
+    tagline: 'See your website on phone + tablet + laptop at once',
+    baby: 'Instead of testing one screen size at a time — Polypane shows multiple sizes ALL AT ONCE side by side. Change something and it updates everywhere instantly. Massive time saver when building websites.',
+    prereqs: 'Start building websites first',
+    learn: 'Responsive web design',
+    after: 'Build websites that look perfect on every screen size, way faster',
+    redeem: 'When actively building websites'
+  },
+  {
+    id: 'gitkraken', name: 'GitKraken', emoji: '🐙', type: 'Dev Tools',
+    urgency: 'later', color: 'var(--yellow)',
+    duration: '6 months free',
+    tagline: 'Visual GitHub management — click buttons instead of commands',
+    baby: 'Managing your GitHub code normally requires complicated commands in a black screen. GitKraken turns all of that into simple click buttons with a visual interface. Like drag-and-drop instead of typing commands.',
+    prereqs: 'Basic GitHub usage first',
+    learn: 'Advanced version control, visual git management',
+    after: 'Manage complex coding projects without the scary command line',
+    redeem: 'After you\'re comfortable with GitHub basics'
+  },
+  {
+    id: 'blockchair', name: 'Blockchair', emoji: '₿', type: 'Dev Tools',
+    urgency: 'later', color: 'var(--yellow)',
+    duration: '100,000 free API requests',
+    tagline: 'Crypto and blockchain data — only if relevant to you',
+    baby: 'If you ever build something that tracks Bitcoin or works with blockchain data — Blockchair gives you access to all of that data automatically. Very niche. Only relevant if crypto becomes part of what you build.',
+    prereqs: 'Have a specific crypto/blockchain project in mind',
+    learn: 'Blockchain data, crypto APIs',
+    after: 'Build crypto-related tools and products',
+    redeem: 'Only if you decide to go into crypto/blockchain'
+  },
+  {
+    id: 'configcat', name: 'ConfigCat', emoji: '🎛️', type: 'Dev Tools',
+    urgency: 'later', color: 'var(--yellow)',
+    duration: 'Free forever',
+    tagline: 'Turn features on/off for different users',
+    baby: 'Imagine you built an app and want to test a new button with 10% of your users first. ConfigCat lets you do that — turn features on or off for specific users without rebuilding anything. Very useful for real products.',
+    prereqs: 'Have a real product with users',
+    learn: 'Feature flags, gradual product releases',
+    after: 'Release new features safely — test with small groups first',
+    redeem: 'When running a real product with actual users'
+  },
+  {
+    id: 'workingcopy', name: 'WorkingCopy', emoji: '📲', type: 'Dev Tools',
+    urgency: 'later', color: 'var(--yellow)',
+    duration: 'Free while student',
+    tagline: 'GitHub Desktop but on your iPhone',
+    baby: 'GitHub Desktop for your laptop. WorkingCopy is the same thing for your iPhone. If you\'re on the go and need to update your portfolio — do it from your phone without opening your laptop.',
+    prereqs: 'Have an iPhone and use GitHub',
+    learn: 'Mobile git management',
+    after: 'Update your website and projects from anywhere on your phone',
+    redeem: 'If you have an iPhone and want mobile access to your GitHub'
+  }
+];
+
+// ── STATE ────────────────────────────────────────────────
+let currentFilter = 'all';
+let searchQuery = '';
+let currentTool = null;
+let savedData = {}; // { toolId: { note, links, status } }
+let linksList = []; // temp links for current modal
+
+// ── APPWRITE ─────────────────────────────────────────────
+async function loadFromAppwrite() {
+  try {
+    const res = await fetch(
+      `${APPWRITE_URL}/databases/${DATABASE_ID}/collections/${COLLECTION_ID}/documents`,
+      { headers: { 'X-Appwrite-Project': PROJECT_ID, 'Content-Type': 'application/json' } }
+    );
+    const data = await res.json();
+    if (data.documents) {
+      data.documents.forEach(doc => {
+        savedData[doc.$id] = {
+          note: doc.note || '',
+          links: doc.links ? JSON.parse(doc.links) : [],
+          status: doc.status || 'Not Started'
+        };
+      });
+    }
+  } catch (e) {
+    console.log('Load error:', e);
+  }
+  renderGrid();
+}
+
+async function saveToAppwrite(toolId, noteVal, linksVal, statusVal) {
+  const body = {
+    note: noteVal,
+    links: JSON.stringify(linksVal),
+    status: statusVal
+  };
+  try {
+    // Try update first
+    const res = await fetch(
+      `${APPWRITE_URL}/databases/${DATABASE_ID}/collections/${COLLECTION_ID}/documents/${toolId}`,
+      {
+        method: 'PATCH',
+        headers: { 'X-Appwrite-Project': PROJECT_ID, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: body })
+      }
+    );
+    if (res.status === 404) {
+      // Create if not exists
+      await fetch(
+        `${APPWRITE_URL}/databases/${DATABASE_ID}/collections/${COLLECTION_ID}/documents`,
+        {
+          method: 'POST',
+          headers: { 'X-Appwrite-Project': PROJECT_ID, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ documentId: toolId, data: body })
+        }
+      );
+    }
+    savedData[toolId] = { note: noteVal, links: linksVal, status: statusVal };
+  } catch (e) {
+    console.log('Save error:', e);
+  }
+}
+
+// ── RENDER ───────────────────────────────────────────────
+function getTypeColor(type) {
+  const map = {
+    'Learning': 'var(--tag-learn)',
+    'Design': 'var(--tag-design)',
+    'Hosting': 'var(--tag-host)',
+    'Payments': 'var(--tag-pay)',
+    'Security': 'var(--tag-security)',
+    'Productivity': 'var(--tag-productivity)',
+    'Dev Tools': 'var(--tag-dev)',
+    'Domain': 'var(--tag-domain)'
+  };
+  return map[type] || '#555';
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  let filtered = tools.filter(t => {
+    if (currentFilter === 'all') return true;
+    if (['now', 'soon', 'later'].includes(currentFilter)) return t.urgency === currentFilter;
+    if (['Not Started', 'In Progress', 'Done'].includes(currentFilter)) {
+      return (savedData[t.id]?.status || 'Not Started') === currentFilter;
+    }
+    return t.type === currentFilter;
+  });
+
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    filtered = filtered.filter(t =>
+      t.name.toLowerCase().includes(q) ||
+      t.tagline.toLowerCase().includes(q) ||
+      t.type.toLowerCase().includes(q) ||
+      t.baby.toLowerCase().includes(q)
+    );
+  }
+
+  document.getElementById('countBadge').textContent = `${filtered.length} tools`;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty">No tools found</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(t => {
+    const d = savedData[t.id] || {};
+    const status = d.status || 'Not Started';
+    const statusClass = status === 'Done' ? 'done' : status === 'In Progress' ? 'progress' : 'not-started';
+    const typeColor = getTypeColor(t.type);
+    return `
+      <div class="card" style="--accent:${t.color}" onclick="openModal('${t.id}')">
+        <div class="urgency ${t.urgency}">${t.urgency === 'now' ? '🔴 Now' : t.urgency === 'soon' ? '🟡 Soon' : '🔵 Later'}</div>
+        <div class="card-top">
+          <div>
+            <div class="card-type" style="background:${typeColor}22;color:${typeColor}">${t.type}</div>
+            <div class="card-name">${t.name}</div>
+          </div>
+          <div class="card-emoji">${t.emoji}</div>
+        </div>
+        <div class="card-desc">${t.tagline}</div>
+        <div class="card-meta">
+          <span class="card-duration">${t.duration}</span>
+          <div class="status-dot ${statusClass}" title="${status}"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── FILTER / SEARCH ──────────────────────────────────────
+function filterBy(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderGrid();
+}
+
+function searchTools(q) {
+  searchQuery = q;
+  renderGrid();
+}
+
+// ── MODAL ────────────────────────────────────────────────
+function openModal(toolId) {
+  const t = tools.find(x => x.id === toolId);
+  if (!t) return;
+  currentTool = t;
+
+  const d = savedData[toolId] || {};
+  linksList = d.links ? [...d.links] : [];
+
+  document.getElementById('mEmoji').textContent = t.emoji;
+  document.getElementById('mName').textContent = t.name;
+  document.getElementById('mTagline').textContent = t.tagline;
+
+  const typeColor = getTypeColor(t.type);
+  document.getElementById('mGrid').innerHTML = `
+    <div class="info-block">
+      <div class="info-block-label">⏳ How Long</div>
+      <div class="info-block-value">${t.duration}</div>
+    </div>
+    <div class="info-block">
+      <div class="info-block-label">🏷️ Type</div>
+      <div class="info-block-value" style="color:${typeColor}">${t.type}</div>
+    </div>
+    <div class="info-block full-width">
+      <div class="info-block-label">👶 What Is It (Baby Explanation)</div>
+      <div class="info-block-value">${t.baby}</div>
+    </div>
+    <div class="info-block">
+      <div class="info-block-label">📋 Prerequisites</div>
+      <div class="info-block-value">${t.prereqs}</div>
+    </div>
+    <div class="info-block">
+      <div class="info-block-label">📖 What You Learn</div>
+      <div class="info-block-value">${t.learn}</div>
+    </div>
+    <div class="info-block full-width">
+      <div class="info-block-label">🚀 After This, You Can</div>
+      <div class="info-block-value">${t.after}</div>
+    </div>
+    <div class="info-block full-width">
+      <div class="info-block-label">🎯 How To Redeem</div>
+      <div class="info-block-value">${t.redeem}</div>
+    </div>
+  `;
+
+  document.getElementById('mNotes').value = d.note || '';
+  document.getElementById('mStatus').value = d.status || 'Not Started';
+  renderLinks();
+
+  document.getElementById('saveMsg').classList.remove('show');
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function renderLinks() {
+  const container = document.getElementById('savedLinks');
+  if (!linksList.length) { container.innerHTML = ''; return; }
+  container.innerHTML = linksList.map((l, i) => `
+    <div class="saved-link">
+      <span class="link-label">${l.label || 'Link'}</span>
+      <a href="${l.url}" target="_blank">${l.url}</a>
+      <button class="btn small danger" onclick="removeLink(${i})">✕</button>
+    </div>
+  `).join('');
+}
+
+function addLink() {
+  const label = document.getElementById('linkLabel').value.trim();
+  const url = document.getElementById('linkUrl').value.trim();
+  if (!url) return;
+  linksList.push({ label: label || 'Link', url });
+  document.getElementById('linkLabel').value = '';
+  document.getElementById('linkUrl').value = '';
+  renderLinks();
+}
+
+function removeLink(i) {
+  linksList.splice(i, 1);
+  renderLinks();
+}
+
+async function saveData() {
+  if (!currentTool) return;
+  const note = document.getElementById('mNotes').value;
+  const status = document.getElementById('mStatus').value;
+  await saveToAppwrite(currentTool.id, note, linksList, status);
+  const msg = document.getElementById('saveMsg');
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 2500);
+  renderGrid();
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  currentTool = null;
+}
+
+// ── INIT ─────────────────────────────────────────────────
+loadFromAppwrite();
+</script>
+</body>
+</html>
