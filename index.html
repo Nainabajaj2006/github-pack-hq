@@ -7,117 +7,529 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #080808; --surface: #101010; --surface2: #181818; --surface3: #202020;
-    --border: #1e1e1e; --border2: #2a2a2a; --text: #efefef;
-    --muted: #4a4a4a; --muted2: #666; --red: #ff4444; --yellow: #f5c518;
-    --blue: #4a9eff; --green: #2ecc71; --purple: #b06cff; --pink: #ff6eb4;
-    --orange: #ff8c42; --cyan: #00d4d4;
+    --bg: #080808;
+    --surface: #101010;
+    --surface2: #181818;
+    --surface3: #202020;
+    --border: #1e1e1e;
+    --border2: #2a2a2a;
+    --text: #efefef;
+    --muted: #4a4a4a;
+    --muted2: #666;
+    --red: #ff4444;
+    --yellow: #f5c518;
+    --blue: #4a9eff;
+    --green: #2ecc71;
+    --purple: #b06cff;
+    --pink: #ff6eb4;
+    --orange: #ff8c42;
+    --cyan: #00d4d4;
+    --teal: #00b894;
   }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+  }
+
   .app { display: flex; height: 100vh; overflow: hidden; }
-  .sidebar { width: 240px; min-width: 240px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; padding: 20px 12px; gap: 2px; }
-  .logo { padding: 4px 8px 20px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
-  .logo-top { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--muted2); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 4px; }
-  .logo-name { font-size: 16px; font-weight: 800; color: var(--yellow); letter-spacing: -0.5px; }
-  .sidebar-label { font-size: 9px; text-transform: uppercase; letter-spacing: 2.5px; color: var(--muted); padding: 10px 8px 4px; font-family: 'Space Mono', monospace; }
-  .sb-btn { background: none; border: none; color: var(--muted2); text-align: left; padding: 7px 10px; border-radius: 6px; cursor: pointer; font-family: 'Syne', sans-serif; font-size: 13px; transition: all 0.12s; display: flex; align-items: center; gap: 9px; width: 100%; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 240px;
+    min-width: 240px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 20px 12px;
+    gap: 2px;
+  }
+
+  .logo {
+    padding: 4px 8px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .logo-top {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--muted2);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 4px;
+  }
+  .logo-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--yellow);
+    letter-spacing: -0.5px;
+  }
+
+  .sidebar-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--muted);
+    padding: 10px 8px 4px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .sb-btn {
+    background: none;
+    border: none;
+    color: var(--muted2);
+    text-align: left;
+    padding: 7px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    transition: all 0.12s;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+  }
   .sb-btn:hover { background: var(--surface2); color: var(--text); }
   .sb-btn.active { background: var(--surface2); color: var(--text); }
+
   .sb-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .sb-count { margin-left: auto; font-size: 10px; font-family: 'Space Mono', monospace; color: var(--muted); background: var(--surface3); padding: 1px 6px; border-radius: 10px; }
+
+  .sb-count {
+    margin-left: auto;
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    color: var(--muted);
+    background: var(--surface3);
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+
+  /* MAIN */
   .main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
-  .topbar { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; position: sticky; top: 0; background: var(--bg); z-index: 10; }
-  .search { flex: 1; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 9px 14px; color: var(--text); font-family: 'Syne', sans-serif; font-size: 13px; outline: none; transition: border 0.2s; }
+
+  .topbar {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+  }
+
+  .search {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 9px 14px;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border 0.2s;
+  }
   .search:focus { border-color: var(--yellow); }
   .search::placeholder { color: var(--muted); }
-  .count-badge { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted2); white-space: nowrap; }
-  .grid { padding: 20px 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; align-content: start; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; cursor: pointer; transition: all 0.15s; position: relative; overflow: hidden; }
-  .card:hover { border-color: var(--border2); transform: translateY(-1px); background: var(--surface2); }
-  .card-accent { position: absolute; top: 0; left: 0; right: 0; height: 2px; }
-  .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+
+  .count-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted2);
+    white-space: nowrap;
+  }
+
+  /* GRID */
+  .grid {
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 12px;
+    align-content: start;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card:hover {
+    border-color: var(--border2);
+    transform: translateY(-1px);
+    background: var(--surface2);
+  }
+  .card-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
   .card-emoji { font-size: 20px; }
-  .card-urgency { font-size: 9px; font-family: 'Space Mono', monospace; padding: 2px 7px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .card-urgency {
+    font-size: 9px;
+    font-family: 'Space Mono', monospace;
+    padding: 2px 7px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
   .u-now { background: rgba(255,68,68,0.12); color: var(--red); border: 1px solid rgba(255,68,68,0.25); }
   .u-soon { background: rgba(245,197,24,0.12); color: var(--yellow); border: 1px solid rgba(245,197,24,0.25); }
   .u-later { background: rgba(74,158,255,0.12); color: var(--blue); border: 1px solid rgba(74,158,255,0.25); }
-  .card-type { font-size: 9px; font-family: 'Space Mono', monospace; padding: 2px 7px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: inline-block; }
-  .card-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; line-height: 1.3; }
-  .card-tagline { font-size: 11px; color: var(--muted2); line-height: 1.5; margin-bottom: 12px; }
-  .card-footer { display: flex; justify-content: space-between; align-items: center; }
-  .card-duration { font-size: 10px; font-family: 'Space Mono', monospace; color: var(--muted); }
-  .status-pip { width: 7px; height: 7px; border-radius: 50%; }
+
+  .card-type {
+    font-size: 9px;
+    font-family: 'Space Mono', monospace;
+    padding: 2px 7px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    display: inline-block;
+  }
+
+  .card-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .card-tagline {
+    font-size: 11px;
+    color: var(--muted2);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card-duration {
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    color: var(--muted);
+  }
+
+  .status-pip {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+  }
   .s-not { background: var(--muted); }
   .s-prog { background: var(--yellow); }
   .s-done { background: var(--green); }
-  .card-warn { font-size: 9px; color: var(--orange); font-family: 'Space Mono', monospace; margin-top: 6px; }
-  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
+
+  /* WARNING BADGE ON CARD */
+  .card-warn {
+    font-size: 9px;
+    color: var(--orange);
+    font-family: 'Space Mono', monospace;
+    margin-top: 6px;
+  }
+
+  /* MODAL */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
   .overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; width: 100%; max-width: 700px; max-height: 92vh; overflow-y: auto; position: relative; }
-  .modal-top { padding: 28px 28px 0; position: sticky; top: 0; background: var(--surface); z-index: 1; border-radius: 14px 14px 0 0; }
-  .modal-close { position: absolute; top: 16px; right: 16px; background: var(--surface2); border: 1px solid var(--border2); color: var(--muted2); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    width: 100%;
+    max-width: 700px;
+    max-height: 92vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .modal-top {
+    padding: 28px 28px 0;
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 1;
+    border-radius: 14px 14px 0 0;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--muted2);
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.12s;
+  }
   .modal-close:hover { color: var(--text); }
+
   .modal-emoji { font-size: 32px; margin-bottom: 10px; }
   .modal-name { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
   .modal-tagline { color: var(--muted2); font-size: 13px; line-height: 1.5; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+
   .modal-body { padding: 20px 28px 28px; }
-  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-  .ib { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+
+  /* INFO BLOCKS */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .ib {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
   .ib.full { grid-column: 1 / -1; }
   .ib.warn { border-color: rgba(255,140,66,0.3); background: rgba(255,140,66,0.05); }
   .ib.tip { border-color: rgba(245,197,24,0.3); background: rgba(245,197,24,0.04); }
-  .ib-label { font-size: 9px; font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted2); margin-bottom: 5px; }
+
+  .ib-label {
+    font-size: 9px;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted2);
+    margin-bottom: 5px;
+  }
   .ib-label.warn-label { color: var(--orange); }
   .ib-label.tip-label { color: var(--yellow); }
-  .ib-val { font-size: 12px; color: var(--text); line-height: 1.55; }
+
+  .ib-val {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.55;
+  }
   .ib-val.highlight { color: var(--yellow); font-weight: 700; }
   .ib-val.red { color: var(--red); }
   .ib-val.green { color: var(--green); }
-  .sec-title { font-size: 9px; font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 2px; color: var(--muted2); margin: 20px 0 10px; }
-  .urgency-row { display: flex; gap: 8px; margin-bottom: 4px; }
-  .u-btn { flex: 1; padding: 8px; border-radius: 7px; border: 1px solid var(--border2); background: var(--surface2); color: var(--muted2); font-family: 'Space Mono', monospace; font-size: 10px; cursor: pointer; transition: all 0.12s; text-align: center; }
+
+  /* SECTION TITLES */
+  .sec-title {
+    font-size: 9px;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted2);
+    margin: 20px 0 10px;
+  }
+
+  /* URGENCY OVERRIDE */
+  .urgency-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .u-btn {
+    flex: 1;
+    padding: 8px;
+    border-radius: 7px;
+    border: 1px solid var(--border2);
+    background: var(--surface2);
+    color: var(--muted2);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.12s;
+    text-align: center;
+  }
   .u-btn:hover { border-color: #444; color: var(--text); }
   .u-btn.sel-now { background: rgba(255,68,68,0.12); color: var(--red); border-color: rgba(255,68,68,0.4); }
   .u-btn.sel-soon { background: rgba(245,197,24,0.12); color: var(--yellow); border-color: rgba(245,197,24,0.4); }
   .u-btn.sel-later { background: rgba(74,158,255,0.12); color: var(--blue); border-color: rgba(74,158,255,0.4); }
-  .notes-box { width: 100%; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; padding: 12px 14px; color: var(--text); font-family: 'Syne', sans-serif; font-size: 13px; resize: vertical; min-height: 110px; outline: none; transition: border 0.2s; line-height: 1.6; }
+
+  /* NOTES */
+  .notes-box {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    resize: vertical;
+    min-height: 110px;
+    outline: none;
+    transition: border 0.2s;
+    line-height: 1.6;
+  }
   .notes-box:focus { border-color: var(--yellow); }
   .notes-box::placeholder { color: var(--muted); }
-  .link-add-row { display: flex; gap: 8px; align-items: center; }
-  .link-inp { background: var(--surface2); border: 1px solid var(--border2); border-radius: 7px; padding: 9px 12px; color: var(--text); font-family: 'Syne', sans-serif; font-size: 12px; outline: none; transition: border 0.2s; }
+
+  /* LINKS */
+  .link-add-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .link-inp {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 7px;
+    padding: 9px 12px;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    outline: none;
+    transition: border 0.2s;
+  }
   .link-inp:focus { border-color: var(--yellow); }
   .link-inp::placeholder { color: var(--muted); }
   .link-inp.lbl { width: 160px; flex-shrink: 0; }
   .link-inp.url { flex: 1; }
+
   .saved-links-container { margin-bottom: 10px; }
-  .saved-link-item { display: flex; align-items: center; gap: 8px; background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; padding: 9px 12px; margin-bottom: 6px; }
-  .saved-link-item .lbl-tag { font-size: 10px; font-family: 'Space Mono', monospace; color: var(--muted2); flex-shrink: 0; }
-  .saved-link-item a { flex: 1; color: var(--blue); text-decoration: none; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .saved-link-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 9px 12px;
+    margin-bottom: 6px;
+  }
+  .saved-link-item .lbl-tag {
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    color: var(--muted2);
+    flex-shrink: 0;
+  }
+  .saved-link-item a {
+    flex: 1;
+    color: var(--blue);
+    text-decoration: none;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .saved-link-item a:hover { text-decoration: underline; }
-  .status-row { display: flex; gap: 8px; }
-  .stat-btn { flex: 1; padding: 9px; border-radius: 7px; border: 1px solid var(--border2); background: var(--surface2); color: var(--muted2); font-family: 'Syne', sans-serif; font-size: 12px; cursor: pointer; transition: all 0.12s; text-align: center; }
+
+  /* STATUS */
+  .status-row {
+    display: flex;
+    gap: 8px;
+  }
+  .stat-btn {
+    flex: 1;
+    padding: 9px;
+    border-radius: 7px;
+    border: 1px solid var(--border2);
+    background: var(--surface2);
+    color: var(--muted2);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.12s;
+    text-align: center;
+  }
   .stat-btn:hover { border-color: #444; color: var(--text); }
   .stat-btn.sel-ns { background: rgba(74,74,74,0.2); color: #aaa; border-color: #444; }
   .stat-btn.sel-ip { background: rgba(245,197,24,0.1); color: var(--yellow); border-color: rgba(245,197,24,0.4); }
   .stat-btn.sel-done { background: rgba(46,204,113,0.1); color: var(--green); border-color: rgba(46,204,113,0.4); }
-  .btn { background: var(--surface2); border: 1px solid var(--border2); color: var(--text); padding: 8px 14px; border-radius: 7px; cursor: pointer; font-family: 'Syne', sans-serif; font-size: 12px; transition: all 0.12s; white-space: nowrap; }
+
+  /* BUTTONS */
+  .btn {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    transition: all 0.12s;
+    white-space: nowrap;
+  }
   .btn:hover { border-color: #444; }
   .btn.primary { background: var(--yellow); color: #000; border-color: var(--yellow); font-weight: 700; font-size: 13px; padding: 10px 20px; }
   .btn.primary:hover { background: #e8bb00; }
-  .btn.primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
   .btn.sm { padding: 6px 10px; font-size: 11px; }
   .btn.danger { color: var(--red); border-color: transparent; }
   .btn.danger:hover { background: rgba(255,68,68,0.1); border-color: rgba(255,68,68,0.2); }
+
   .save-row { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
-  .save-msg { font-size: 11px; font-family: 'Space Mono', monospace; opacity: 0; transition: opacity 0.3s; }
+  .save-msg {
+    font-size: 11px;
+    color: var(--green);
+    font-family: 'Space Mono', monospace;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
   .save-msg.show { opacity: 1; }
-  .save-msg.ok { color: var(--green); }
-  .save-msg.err { color: var(--red); }
-  .loading { grid-column: 1/-1; display: flex; align-items: center; justify-content: center; padding: 80px; color: var(--muted2); font-family: 'Space Mono', monospace; font-size: 12px; gap: 10px; }
-  .spinner { width: 14px; height: 14px; border: 2px solid var(--border2); border-top-color: var(--yellow); border-radius: 50%; animation: spin 0.7s linear infinite; }
+
+  /* LOADING / EMPTY */
+  .loading {
+    grid-column: 1/-1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px;
+    color: var(--muted2);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    gap: 10px;
+  }
+  .spinner {
+    width: 14px; height: 14px;
+    border: 2px solid var(--border2);
+    border-top-color: var(--yellow);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .empty { grid-column: 1/-1; text-align: center; padding: 60px; color: var(--muted); font-family: 'Space Mono', monospace; font-size: 12px; }
+  .empty {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 60px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+  }
+
   ::-webkit-scrollbar { width: 3px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
@@ -125,30 +537,71 @@
 </head>
 <body>
 <div class="app">
+
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
       <div class="logo-top">GitHub Pack</div>
       <div class="logo-name">Naina's HQ</div>
     </div>
+
     <div class="sidebar-label">By Timeline</div>
-    <button class="sb-btn active" onclick="setFilter('all',this)"><div class="sb-dot" style="background:#444"></div> All Tools<span class="sb-count" id="cnt-all">0</span></button>
-    <button class="sb-btn" onclick="setFilter('now',this)"><div class="sb-dot" style="background:var(--red)"></div> Start Now<span class="sb-count" id="cnt-now">0</span></button>
-    <button class="sb-btn" onclick="setFilter('soon',this)"><div class="sb-dot" style="background:var(--yellow)"></div> Start Soon<span class="sb-count" id="cnt-soon">0</span></button>
-    <button class="sb-btn" onclick="setFilter('later',this)"><div class="sb-dot" style="background:var(--blue)"></div> Start Later<span class="sb-count" id="cnt-later">0</span></button>
+    <button class="sb-btn active" onclick="setFilter('all',this)">
+      <div class="sb-dot" style="background:#444"></div> All Tools
+      <span class="sb-count" id="cnt-all">0</span>
+    </button>
+    <button class="sb-btn" onclick="setFilter('now',this)">
+      <div class="sb-dot" style="background:var(--red)"></div> Start Now
+      <span class="sb-count" id="cnt-now">0</span>
+    </button>
+    <button class="sb-btn" onclick="setFilter('soon',this)">
+      <div class="sb-dot" style="background:var(--yellow)"></div> Start Soon
+      <span class="sb-count" id="cnt-soon">0</span>
+    </button>
+    <button class="sb-btn" onclick="setFilter('later',this)">
+      <div class="sb-dot" style="background:var(--blue)"></div> Start Later
+      <span class="sb-count" id="cnt-later">0</span>
+    </button>
+
     <div class="sidebar-label" style="margin-top:8px">By Category</div>
-    <button class="sb-btn" onclick="setFilter('Learning',this)"><div class="sb-dot" style="background:var(--purple)"></div> Learning</button>
-    <button class="sb-btn" onclick="setFilter('Design',this)"><div class="sb-dot" style="background:var(--pink)"></div> Design</button>
-    <button class="sb-btn" onclick="setFilter('Hosting',this)"><div class="sb-dot" style="background:var(--blue)"></div> Hosting</button>
-    <button class="sb-btn" onclick="setFilter('Payments',this)"><div class="sb-dot" style="background:var(--green)"></div> Payments</button>
-    <button class="sb-btn" onclick="setFilter('Security',this)"><div class="sb-dot" style="background:var(--orange)"></div> Security</button>
-    <button class="sb-btn" onclick="setFilter('Productivity',this)"><div class="sb-dot" style="background:var(--cyan)"></div> Productivity</button>
-    <button class="sb-btn" onclick="setFilter('Dev Tools',this)"><div class="sb-dot" style="background:var(--yellow)"></div> Dev Tools</button>
-    <button class="sb-btn" onclick="setFilter('Domain',this)"><div class="sb-dot" style="background:var(--red)"></div> Domain</button>
+    <button class="sb-btn" onclick="setFilter('Learning',this)">
+      <div class="sb-dot" style="background:var(--purple)"></div> Learning
+    </button>
+    <button class="sb-btn" onclick="setFilter('Design',this)">
+      <div class="sb-dot" style="background:var(--pink)"></div> Design
+    </button>
+    <button class="sb-btn" onclick="setFilter('Hosting',this)">
+      <div class="sb-dot" style="background:var(--blue)"></div> Hosting
+    </button>
+    <button class="sb-btn" onclick="setFilter('Payments',this)">
+      <div class="sb-dot" style="background:var(--green)"></div> Payments
+    </button>
+    <button class="sb-btn" onclick="setFilter('Security',this)">
+      <div class="sb-dot" style="background:var(--orange)"></div> Security
+    </button>
+    <button class="sb-btn" onclick="setFilter('Productivity',this)">
+      <div class="sb-dot" style="background:var(--cyan)"></div> Productivity
+    </button>
+    <button class="sb-btn" onclick="setFilter('Dev Tools',this)">
+      <div class="sb-dot" style="background:var(--yellow)"></div> Dev Tools
+    </button>
+    <button class="sb-btn" onclick="setFilter('Domain',this)">
+      <div class="sb-dot" style="background:var(--red)"></div> Domain
+    </button>
+
     <div class="sidebar-label" style="margin-top:8px">By Status</div>
-    <button class="sb-btn" onclick="setFilter('Not Started',this)"><div class="sb-dot" style="background:var(--muted)"></div> Not Started</button>
-    <button class="sb-btn" onclick="setFilter('In Progress',this)"><div class="sb-dot" style="background:var(--yellow)"></div> In Progress</button>
-    <button class="sb-btn" onclick="setFilter('Done',this)"><div class="sb-dot" style="background:var(--green)"></div> Done</button>
+    <button class="sb-btn" onclick="setFilter('Not Started',this)">
+      <div class="sb-dot" style="background:var(--muted)"></div> Not Started
+    </button>
+    <button class="sb-btn" onclick="setFilter('In Progress',this)">
+      <div class="sb-dot" style="background:var(--yellow)"></div> In Progress
+    </button>
+    <button class="sb-btn" onclick="setFilter('Done',this)">
+      <div class="sb-dot" style="background:var(--green)"></div> Done
+    </button>
   </aside>
+
+  <!-- MAIN -->
   <main class="main">
     <div class="topbar">
       <input class="search" placeholder="Search tools..." oninput="doSearch(this.value)" />
@@ -160,6 +613,7 @@
   </main>
 </div>
 
+<!-- MODAL -->
 <div class="overlay" id="overlay" onclick="maybeClose(event)">
   <div class="modal" id="modal">
     <div class="modal-top">
@@ -170,6 +624,7 @@
     </div>
     <div class="modal-body">
       <div class="info-grid" id="mInfoGrid"></div>
+
       <div class="sec-title">📌 Your Timeline Label</div>
       <div class="urgency-row">
         <button class="u-btn" id="ubtn-now" onclick="setUrgency('now')">🔴 Start Now</button>
@@ -177,8 +632,10 @@
         <button class="u-btn" id="ubtn-later" onclick="setUrgency('later')">🔵 Start Later</button>
       </div>
       <div style="font-size:10px;color:var(--muted2);font-family:'Space Mono',monospace;margin-top:4px;">Override my suggestion — your call.</div>
+
       <div class="sec-title">📝 Notes & Learnings</div>
       <textarea class="notes-box" id="mNotes" placeholder="Type anything — what you learned, questions, thoughts, progress..."></textarea>
+
       <div class="sec-title">🔗 Documents & Links</div>
       <div class="saved-links-container" id="savedLinks"></div>
       <div class="link-add-row">
@@ -186,87 +643,910 @@
         <input class="link-inp url" id="linkUrl" placeholder="Paste any link — Drive, Notion, PDF..." />
         <button class="btn sm" onclick="addLink()">+ Add</button>
       </div>
+
       <div class="sec-title">✅ Status</div>
       <div class="status-row">
         <button class="stat-btn" id="sbtn-ns" onclick="setStatus('Not Started')">⚪ Not Started</button>
         <button class="stat-btn" id="sbtn-ip" onclick="setStatus('In Progress')">🟡 In Progress</button>
         <button class="stat-btn" id="sbtn-done" onclick="setStatus('Done')">🟢 Done</button>
       </div>
+
       <div class="save-row">
-        <button class="btn primary" id="saveBtn" onclick="saveData()">Save Everything</button>
-        <span class="save-msg" id="saveMsg"></span>
+        <button class="btn primary" onclick="saveData()">Save Everything</button>
+        <span class="save-msg" id="saveMsg">✓ Saved!</span>
       </div>
     </div>
   </div>
 </div>
 
 <script>
+// ── APPWRITE CONFIG ──────────────────────────────────────
 const AW = {
-  url: 'https://sgp.cloud.appwrite.io/v1',
+  url: 'https://cloud.appwrite.io/v1',
   project: '69a7448a002fc5074132',
   db: '69a74521003636c06877',
   col: 'notesdashboardgithubnaina'
 };
 
+// ── TOOLS DATA ───────────────────────────────────────────
 const TOOLS = [
-  { id:'codedex', name:'Codedex', emoji:'🎮', type:'Learning', defaultUrgency:'now', color:'var(--purple)', duration:'6 months free', tagline:'Learn to code from zero — feels like a game, built for Gen Z', baby:'This is your starting point for coding. It teaches you Python, HTML, CSS, JavaScript — but it feels like playing a game, not studying. You earn XP, level up, complete challenges. Made specifically for people who have never touched code in their life.', learn:'Python basics, HTML, CSS, JavaScript fundamentals', prereqs:'Zero. Absolute zero. Start here.', whenRedeem:'NOW — this is your entry point. Activate and start immediately.', clockStart:'Clock starts the moment you activate. You have 6 months from that day.', expires:'After 6 months you lose access to premium content. Free tier stays but is limited.', autoCharge:'No automatic charge — they will email you before it ends. You choose to pay or not.', renewable:'No — one time student benefit.', tips:'Pick ONE language to start — go with Python. Don\'t jump between languages. Go in order. 30 mins a day beats 3 hours once a week.', redeem:'education.github.com/pack → find Codedex → click Get Access → sign in with GitHub', after:'You can write basic Python scripts, understand how code works, and start building simple things. This unlocks everything else.' },
-  { id:'datacamp', name:'DataCamp', emoji:'📈', type:'Learning', defaultUrgency:'now', color:'var(--purple)', duration:'3 months free', tagline:'Data skills — the fastest way to charge more per client', baby:'DataCamp teaches you to work with data. Think Excel but way more powerful. You learn Python for data, making charts and dashboards, analysing what\'s working. Interactive lessons — you practice as you watch.', learn:'Data analysis, Python for data, making dashboards, SQL basics', prereqs:'Basic Codedex Python first — just 2-3 weeks of Codedex before starting this.', whenRedeem:'Start Codedex first. Activate DataCamp 2-3 weeks in when you have basic Python.', clockStart:'Clock starts on activation. Only 3 months so time it right.', expires:'After 3 months you lose access. Premium content gone.', autoCharge:'No automatic charge. They email you. You decide.', renewable:'No — one time.', tips:'⚠️ Only 3 months — do NOT activate before you\'re ready to actually use it. Once activated, treat it like a sprint.', redeem:'education.github.com/pack → DataCamp → Get Access → connect GitHub', after:'You can offer "data + strategy" to clients — not just content. Clients pay significantly more for this.' },
-  { id:'frontendmasters', name:'FrontendMasters', emoji:'🏗️', type:'Learning', defaultUrgency:'now', color:'var(--purple)', duration:'6 months free (worth $390 / ₹32,000)', tagline:'Build websites — add ₹15k–₹30k to what you can charge', baby:'Video lessons that teach you to build websites from scratch. Proper structured courses, not random YouTube videos. If a client asks "can you build me a landing page?" — after this, you say yes.', learn:'Web development, JavaScript, building real functional websites', prereqs:'Basic HTML/CSS from Codedex first — about 3-4 weeks in.', whenRedeem:'After you have HTML/CSS basics from Codedex. Don\'t activate before.', clockStart:'Clock starts on activation. 6 months.', expires:'After 6 months, access gone. Very worth using intensively.', autoCharge:'No automatic charge.', renewable:'No — one time.', tips:'Don\'t try to learn everything. Pick the JavaScript path and go deep. Depth beats breadth.', redeem:'education.github.com/pack → FrontendMasters → 6 months free → connect GitHub', after:'You can build landing pages and portfolio sites for clients. Charge ₹15k–₹30k per page.' },
-  { id:'scrimba', name:'Scrimba', emoji:'💻', type:'Learning', defaultUrgency:'soon', color:'var(--purple)', duration:'1 month free — SHORT', tagline:'Most hands-on coding learning — type inside the video itself', baby:'The video pauses, you type code directly inside it, it checks your answer, you continue. Most interactive way to learn coding.', learn:'JavaScript, CSS, React, Python — same topics as others but hands-on', prereqs:'Basic coding concepts from Codedex first.', whenRedeem:'⚠️ Only 1 month — save this for when you can go ALL IN.', clockStart:'Clock starts on activation. Only 30 days.', expires:'After 1 month, gone. Use it intensively.', autoCharge:'No automatic charge.', renewable:'No.', tips:'Do NOT activate casually. This is a sprint tool. Plan it — pick your month, clear your schedule, then activate and go hard.', redeem:'education.github.com/pack → Scrimba → 1 month free', after:'Intensive hands-on coding skills in 1 month if you go hard.' },
-  { id:'gorails', name:'GoRails', emoji:'🛤️', type:'Learning', defaultUrgency:'later', color:'var(--purple)', duration:'12 months free — longest of any platform', tagline:'Build real web apps fast — longest free period in the pack', baby:'Teaches you to build complete working web applications using Ruby on Rails. Not just theory — you build real things that work.', learn:'Ruby on Rails, building full web apps, databases, user accounts', prereqs:'Solid HTML/CSS/JavaScript basics first. Do Codedex + FrontendMasters first.', whenRedeem:'After you have basics from Codedex and FrontendMasters. This is level 2.', clockStart:'Clock starts on activation. 12 months — generous.', expires:'After 12 months.', autoCharge:'No automatic charge.', renewable:'No.', tips:'Best saved for when you\'re ready to build and sell actual products.', redeem:'education.github.com/pack → GoRails → 12 months free', after:'Build and sell web apps and tools. Significantly higher income — products vs services.' },
-  { id:'educative', name:'Educative', emoji:'📚', type:'Learning', defaultUrgency:'later', color:'var(--purple)', duration:'6 months free', tagline:'Interactive textbooks — read and practice on the same page', baby:'Like a textbook where you read a concept then immediately practice it right there on the page. More structured than videos. 70+ courses.', learn:'Web dev, Python, machine learning basics, system design', prereqs:'None — but better after some Codedex basics.', whenRedeem:'After Codedex. Use if video courses aren\'t working for you.', clockStart:'Clock starts on activation. 6 months.', expires:'After 6 months.', autoCharge:'No automatic charge.', renewable:'No.', tips:'Pick ONE course and finish it. Don\'t browse and switch. Completion beats exploration.', redeem:'education.github.com/pack → Educative → 6 months', after:'Structured coding and data skills with a more academic approach.' },
-  { id:'algoexpert', name:'AlgoExpert', emoji:'🧠', type:'Learning', defaultUrgency:'later', color:'var(--purple)', duration:'20 free problems + 10% discount', tagline:'Coding interview prep — for when you want a proper tech job', baby:'Tech companies make you solve coding puzzles in interviews. AlgoExpert prepares you for exactly that. Not for right now — this is for when you decide you want a real tech job.', learn:'Algorithms, problem solving, coding interview patterns', prereqs:'Solid coding foundations — do everything else first.', whenRedeem:'Only when actively applying for tech jobs.', clockStart:'Discount is always available. Problems are one time.', expires:'No expiry on discount.', autoCharge:'No.', renewable:'No.', tips:'Don\'t worry about this until you\'re job hunting. Not relevant to freelancing.', redeem:'education.github.com/pack → AlgoExpert', after:'Pass coding interviews at tech companies.' },
-  { id:'1password', name:'1Password', emoji:'🔐', type:'Security', defaultUrgency:'now', color:'var(--orange)', duration:'1 year free', tagline:'Secure password locker — you\'re managing someone\'s LinkedIn RIGHT NOW', baby:'You manage someone\'s LinkedIn. That means you know their password. 1Password is a super secure digital locker. You put all passwords in it. Only you can open it. Everything is encrypted.', learn:'Professional credential management, digital security basics', prereqs:'None — download and use immediately.', whenRedeem:'TODAY. You already have someone\'s login credentials. Do this now.', clockStart:'Clock starts on activation. 1 year.', expires:'After 1 year, free tier is very limited.', autoCharge:'They may ask for card at end — read the email they send before expiry.', renewable:'No — one time student benefit.', tips:'When pitching to clients say "I use 1Password to keep your credentials 100% secure." Instantly more professional.', redeem:'education.github.com/pack → 1Password Teams → activate', after:'Your clients\' accounts are safe. You look professional. You never forget a password.' },
-  { id:'slidecoach', name:'SlideCoach', emoji:'🎤', type:'Productivity', defaultUrgency:'now', color:'var(--cyan)', duration:'2000 free credits = 40 full practice sessions', tagline:'AI pitch coach — practice client calls before the real thing', baby:'SlideCoach is an AI you practice your pitch with first — in private. It records you, watches how you speak, then gives detailed feedback on filler words, energy, pace.', learn:'Pitching, presenting, public speaking confidence, handling objections', prereqs:'None. Use before any client call.', whenRedeem:'Now — before your next outreach call or pitch.', clockStart:'Credits based, not time based. 2000 credits = ~40 sessions.', expires:'Credits don\'t expire.', autoCharge:'No.', renewable:'No — one time.', tips:'Practice your exact pitch — don\'t improvise in practice. Say exactly what you\'d say to a real client. Repeat until natural.', redeem:'education.github.com/pack → SlideCoach → activate', after:'You go into every client call having already done it 5 times. Converts better.' },
-  { id:'pomodone', name:'PomoDone', emoji:'⏱️', type:'Productivity', defaultUrgency:'now', color:'var(--cyan)', duration:'2 years free', tagline:'Focus timer — juggling college + internship + learning is hard', baby:'Work 25 minutes, take a 5 minute break, repeat. Pomodoro technique. PomoDone runs that timer and tracks how many hours you actually worked each day.', learn:'Time management, tracking real work hours, avoiding burnout', prereqs:'None.', whenRedeem:'Now — helps immediately.', clockStart:'2 years from activation.', expires:'After 2 years.', autoCharge:'No.', renewable:'No.', tips:'The point isn\'t the timer — it\'s building the habit of focused work.', redeem:'education.github.com/pack → PomoDone → 2 years free', after:'You actually know how many hours you worked. More focused. Less burnout. More output.' },
-  { id:'imgbot', name:'Imgbot', emoji:'🖼️', type:'Dev Tools', defaultUrgency:'now', color:'var(--yellow)', duration:'Free while student', tagline:'Auto-shrinks your portfolio images — zero effort required', baby:'Imgbot connects to your GitHub and automatically shrinks all images to the perfect size without making them look worse. Runs in the background — you don\'t do anything.', learn:'Nothing — it\'s fully automatic', prereqs:'Have a GitHub repository with images (you do).', whenRedeem:'Now — easy win, zero effort.', clockStart:'Active while you\'re a student.', expires:'When you lose student status.', autoCharge:'No.', renewable:'Yes — renews with your student pack.', tips:'Just activate and forget it. It opens pull requests automatically — just click merge.', redeem:'education.github.com/pack → Imgbot → Install on your repositories', after:'Portfolio loads faster. Better Google ranking. Better user experience for potential clients.' },
-  { id:'github-cert', name:'GitHub Certification', emoji:'🏆', type:'Dev Tools', defaultUrgency:'now', color:'var(--yellow)', duration:'1 free exam voucher — ⚠️ EXPIRES JUNE 30 2026', tagline:'Real certified credential for your LinkedIn — worth ₹8,000', baby:'GitHub gives you one free exam to get officially certified. Get GitHub Foundations — it proves you know how to use GitHub. Clients see it and it adds credibility.', learn:'GitHub fundamentals, version control, collaboration', prereqs:'You already use GitHub for your portfolio — you probably know enough. Do a quick practice test first.', whenRedeem:'⚠️ URGENT — expires June 30 2026. Study for 1-2 weeks then take the exam.', clockStart:'Voucher must be used before June 30 2026.', expires:'June 30 2026 — after that the free voucher is gone forever.', autoCharge:'No.', renewable:'No — one time.', tips:'This is time-sensitive. Don\'t sleep on it. Study for 1-2 weeks, take the GitHub Foundations exam, get the cert on your LinkedIn.', redeem:'education.github.com/pack → GitHub Certification → claim voucher → choose GitHub Foundations', after:'Official GitHub certified badge on your LinkedIn and portfolio. Looks very legitimate to clients.' },
-  { id:'notion', name:'Notion', emoji:'📋', type:'Productivity', defaultUrgency:'soon', color:'var(--cyan)', duration:'Free while student (Notion Plus plan)', tagline:'Your work OS — manage clients, content, everything in one place', baby:'Like Google Docs + Google Sheets combined but way more organised. Track clients, plan content, store proposals, track follow-ups. Everything in one place.', learn:'Digital organisation, client management, building systems', prereqs:'None.', whenRedeem:'When you land your first client or start serious outreach.', clockStart:'Active while student.', expires:'When you lose student status.', autoCharge:'No.', renewable:'Yes — renews with student pack.', tips:'Don\'t over-engineer it. Begin with a simple client tracker — name, status, last contact, next step.', redeem:'notion.so → sign up → Settings → Education → verify student status via GitHub', after:'Never lose track of a lead or client. Scale to multiple clients without chaos.' },
-  { id:'visme', name:'Visme', emoji:'📊', type:'Design', defaultUrgency:'soon', color:'var(--pink)', duration:'3 months free', tagline:'Beautiful proposals and reports — make clients think you\'ve done this for years', baby:'Like PowerPoint but dramatically more beautiful. Make pitch decks, weekly reports, proposals. Instead of a Google Doc you send something that looks like it came from an agency.', learn:'Visual communication, client reporting, proposal design', prereqs:'None.', whenRedeem:'When you start sending proposals to clients. Don\'t activate until then.', clockStart:'Clock starts on activation. Only 3 months.', expires:'After 3 months — they will email you.', autoCharge:'May require card for after trial. Read their email before expiry.', renewable:'No.', tips:'⚠️ Only 3 months — activate when you\'re actively pitching clients, not before.', redeem:'education.github.com/pack → Visme → 3 months free', after:'Your proposals look so polished clients assume you\'ve been doing this for years.' },
-  { id:'icons8', name:'Icons8', emoji:'🎨', type:'Design', defaultUrgency:'soon', color:'var(--pink)', duration:'3 months free', tagline:'Millions of free icons and images for posts and proposals', baby:'Icons8 gives you millions of icons, photos, and illustrations — all free to use with no copyright issues. Way better and safer than Googling images.', learn:'Using professional design assets', prereqs:'None.', whenRedeem:'When actively creating content for clients.', clockStart:'3 months from activation.', expires:'After 3 months.', autoCharge:'No.', renewable:'No.', tips:'Activate when you have content to create — don\'t waste the 3 months being idle.', redeem:'education.github.com/pack → Icons8 → activate', after:'Every post and proposal uses professional visuals. Looks premium.' },
-  { id:'iconscout', name:'IconScout', emoji:'✨', type:'Design', defaultUrgency:'soon', color:'var(--pink)', duration:'60 free premium icons/month for 1 year', tagline:'4.9 million icons, 3D images and animations', baby:'4.9 million assets including 3D images and animations. Between Icons8 and IconScout you have unlimited professional visuals for anything you create.', learn:'Using premium design assets', prereqs:'None.', whenRedeem:'When actively creating content.', clockStart:'1 year from activation.', expires:'After 1 year.', autoCharge:'No.', renewable:'No.', tips:'You get 60 free premium icons per month — use them strategically for your best posts and proposals.', redeem:'education.github.com/pack → IconScout → activate', after:'Everything you create looks premium and professional.' },
-  { id:'simple-analytics', name:'SimpleAnalytics', emoji:'📉', type:'Productivity', defaultUrgency:'soon', color:'var(--cyan)', duration:'1 year free', tagline:'See who\'s actually visiting your portfolio and from where', baby:'When you send your portfolio link to potential clients — you can see who actually clicked it, where they came from, what they looked at. Simpler and privacy-friendlier than Google Analytics.', learn:'Website analytics, understanding visitor behaviour', prereqs:'None.', whenRedeem:'When doing active outreach campaigns.', clockStart:'1 year from activation.', expires:'After 1 year.', autoCharge:'No.', renewable:'No.', tips:'Good backup to Google Analytics — simpler dashboard, no cookie banners needed.', redeem:'education.github.com/pack → SimpleAnalytics → activate', after:'Know exactly which outreach is working.' },
-  { id:'testmail', name:'Testmail', emoji:'✉️', type:'Productivity', defaultUrgency:'soon', color:'var(--cyan)', duration:'Free while student', tagline:'Test your outreach emails before sending to real clients', baby:'Before sending an important outreach email, see exactly how it looks in their inbox first. Testmail gives you unlimited test email addresses to send to.', learn:'Email testing, professional outreach', prereqs:'None.', whenRedeem:'When doing email outreach campaigns.', clockStart:'Active while student.', expires:'When student status ends.', autoCharge:'No.', renewable:'Yes.', tips:'Always test before sending to real people. One bad-looking email can kill a great pitch.', redeem:'education.github.com/pack → Testmail → activate', after:'Every email you send looks exactly as intended.' },
-  { id:'stripe', name:'Stripe', emoji:'💳', type:'Payments', defaultUrgency:'soon', color:'var(--green)', duration:'Zero fees on first $1,000 earned (≈₹83,000)', tagline:'Get paid by international clients in dollars', baby:'An American or European client cannot pay you on GPay. Stripe lets them pay by card in dollars, straight to your account, professionally. Like a real business.', learn:'International payments, payment processing basics', prereqs:'None — but activate when you have a client ready to pay.', whenRedeem:'When you have your first international client ready to pay. Not before.', clockStart:'Fee waiver on first $1000 earned from signup.', expires:'The fee waiver is one time. Stripe itself stays active.', autoCharge:'No.', renewable:'No — one time benefit.', tips:'Activate when someone is ready to pay you. The $1000 fee waiver is the main benefit — you keep every rupee of your first ₹83,000.', redeem:'stripe.com → create account → verify identity → add bank account for payouts', after:'You can accept card payments from anywhere in the world. Your global pricing becomes real.' },
-  { id:'namecheap', name:'Namecheap', emoji:'🌐', type:'Domain', defaultUrgency:'soon', color:'var(--red)', duration:'1 year free (.me domain)', tagline:'Get nainabajaj.me — looks professional vs the github.io link', baby:'Your portfolio is at nainabajaj2006.github.io — that immediately says "student". Namecheap lets you get nainabajaj.me for free for 1 year. Same website, professional address.', learn:'Domain management, DNS basics', prereqs:'Have a portfolio worth pointing a domain at first.', whenRedeem:'When your portfolio is polished and you\'re actively sharing it with clients.', clockStart:'1 year from activation.', expires:'After 1 year you pay to renew — roughly ₹800-1200/year.', autoCharge:'They\'ll email renewal notice. You choose.', renewable:'Pay to renew after first year.', tips:'Free domain is .me extension. Professional looking, widely accepted. Better than .github.io.', redeem:'education.github.com/pack → Namecheap → get free .me domain → point to GitHub Pages', after:'Professional domain for your portfolio. Clients take you more seriously immediately.' },
-  { id:'name-com', name:'Name.com', emoji:'🔗', type:'Domain', defaultUrgency:'soon', color:'var(--red)', duration:'1 year free (25+ extensions available)', tagline:'Second free domain — .live, .studio, .app, .dev options', baby:'While Namecheap gives you .me — Name.com gives you options like nainabajaj.live, nainabajaj.studio, nainabajaj.app. You have TWO free domains from your pack.', learn:'Domain management', prereqs:'None.', whenRedeem:'When ready to go professional with your portfolio.', clockStart:'1 year from activation.', expires:'After 1 year — pay to renew.', autoCharge:'Renewal email sent. You choose.', renewable:'Pay to renew.', tips:'.live or .studio sounds modern and creative. Good for a personal brand.', redeem:'education.github.com/pack → Name.com → choose your extension → activate', after:'Two professional domain options. One for each portfolio.' },
-  { id:'pageclip', name:'Pageclip', emoji:'📬', type:'Dev Tools', defaultUrgency:'soon', color:'var(--yellow)', duration:'Free while student', tagline:'Make your portfolio contact form actually work', baby:'Right now if someone fills "contact me" on your portfolio does it actually send you anything? Probably not. Pageclip makes that work — no complicated code needed.', learn:'Basic form handling', prereqs:'Have a portfolio with a contact form.', whenRedeem:'When updating your portfolio.', clockStart:'Active while student.', expires:'When student status ends.', autoCharge:'No.', renewable:'Yes.', tips:'Makes a real difference to conversion — clients can actually reach you without finding your email separately.', redeem:'education.github.com/pack → Pageclip → install on your GitHub Pages site', after:'Potential clients can contact you directly from your portfolio. More inbound.' },
-  { id:'bootstrap-studio', name:'Bootstrap Studio', emoji:'🧱', type:'Dev Tools', defaultUrgency:'soon', color:'var(--yellow)', duration:'Free while student', tagline:'Build websites by drag and drop — like Lego', baby:'Instead of writing all the code from scratch you drag and drop pieces together. You can make a full professional website without knowing much code. Great for client landing pages early on.', learn:'Visual web design, basic HTML/CSS structure', prereqs:'None — very beginner friendly.', whenRedeem:'When you want to build landing pages for clients.', clockStart:'Active while student.', expires:'When student status ends.', autoCharge:'No.', renewable:'Yes.', tips:'Good bridge between no-code and actual coding. Use it while learning proper code.', redeem:'education.github.com/pack → Bootstrap Studio → download app', after:'Build and sell landing pages for clients. Charge ₹10k–₹20k per page even as a beginner.' },
-  { id:'github-pages', name:'GitHub Pages', emoji:'🌍', type:'Hosting', defaultUrgency:'now', color:'var(--blue)', duration:'Free forever (while on GitHub)', tagline:'Free hosting — already using this for your portfolios', baby:'This is where both your portfolios and this dashboard live. GitHub gives you free hosting for websites. You\'re already using it.', learn:'Already using it!', prereqs:'Already active.', whenRedeem:'Already active — nothing to do.', clockStart:'Always active.', expires:'Never — free forever.', autoCharge:'No.', renewable:'Always active.', tips:'You can have multiple GitHub Pages sites — one per repository.', redeem:'Already active!', after:'Host unlimited projects for free.' },
-  { id:'github-copilot', name:'GitHub Copilot', emoji:'🤖', type:'Dev Tools', defaultUrgency:'soon', color:'var(--yellow)', duration:'Free while student', tagline:'AI that writes code next to you — like autocomplete but for coding', baby:'GitHub Copilot suggests what to write next while you code. You spend less time stuck, learn faster, write more code.', learn:'AI-assisted coding, faster development', prereqs:'Start Codedex first. Activate once you\'re actively writing code.', whenRedeem:'After 2-3 weeks of Codedex — once you\'re actually writing code daily.', clockStart:'Active while student.', expires:'When student status ends.', autoCharge:'No.', renewable:'Yes — renews with student pack.', tips:'Don\'t activate before you start coding. Useless if you\'re not writing code yet.', redeem:'github.com → Settings → Copilot → Enable (auto-active with student pack)', after:'You code faster, get stuck less. Learning speed roughly doubles.' },
-  { id:'digitalocean', name:'DigitalOcean', emoji:'🌊', type:'Hosting', defaultUrgency:'later', color:'var(--blue)', duration:'$200 credit (≈₹16,500) — valid 1 year', tagline:'Your own server — host apps, tools, anything you build', baby:'DigitalOcean rents you server space. When you build something beyond a simple website — a tool, an app — this is where it lives.', learn:'Server management, deploying applications, cloud basics', prereqs:'Have something to host. Do all learning platforms first.', whenRedeem:'Only when you have something ready to deploy. Don\'t waste the $200 on nothing.', clockStart:'$200 credit valid for 1 year from activation.', expires:'After 1 year credits expire. Then pay as you go.', autoCharge:'Requires credit card — charges after credit runs out. Monitor usage.', renewable:'No — one time credit.', tips:'⚠️ Requires a credit card. Only activate when you have a specific project.', redeem:'education.github.com/pack → DigitalOcean → $200 credit → add card', after:'Host any app or tool you build on the internet.' },
-  { id:'azure', name:'Microsoft Azure', emoji:'☁️', type:'Hosting', defaultUrgency:'later', color:'var(--blue)', duration:'$100 credit (≈₹8,300)', tagline:'Microsoft\'s cloud — AI tools and automation', baby:'Like DigitalOcean but made by Microsoft. Has extra AI tools for automating reports, analysing LinkedIn data, etc.', learn:'Cloud computing, AI APIs, basic automation', prereqs:'Have a specific project needing cloud or AI features.', whenRedeem:'Only when you have a specific use case.', clockStart:'$100 credit valid 30 days from activation — use it or lose it.', expires:'Credit expires 30 days after activation.', autoCharge:'Requires card. Will charge after credit.', renewable:'No — one time.', tips:'⚠️ Only 30 days to use the $100 credit — very short. Only activate when you have something specific planned.', redeem:'education.github.com/pack → Azure → $100 credit', after:'Cloud and AI capabilities. Automate parts of your workflow.' },
-  { id:'appwrite', name:'Appwrite', emoji:'🔧', type:'Hosting', defaultUrgency:'now', color:'var(--blue)', duration:'Free your entire degree (worth $160/month)', tagline:'Already set up — powers this dashboard\'s storage', baby:'All-in-one kit for building apps. This dashboard uses Appwrite to save your notes across all your devices. Already set up and running.', learn:'Backend development, databases, app architecture', prereqs:'Already active!', whenRedeem:'Already redeemed and running.', clockStart:'Active while student.', expires:'When student status ends.', autoCharge:'No.', renewable:'Yes — while student.', tips:'You\'re already using it. As you build more things, Appwrite will power them.', redeem:'Already active!', after:'Build apps with real data storage that works across all devices.' },
-  { id:'heroku', name:'Heroku', emoji:'🚂', type:'Hosting', defaultUrgency:'later', color:'var(--blue)', duration:'$13/month for 24 months (≈₹26,000 total)', tagline:'Beginner-friendly server — easier than DigitalOcean', baby:'DigitalOcean = building your own house from scratch. Heroku = moving into a furnished apartment. Everything is already set up. Just upload your project and it\'s live.', learn:'App deployment, beginner cloud hosting', prereqs:'Have something to deploy.', whenRedeem:'When you have a project ready to put on the internet.', clockStart:'$13/month credit for 24 months from activation.', expires:'After 24 months.', autoCharge:'May require card. Monitor.', renewable:'No.', tips:'Better starting point than DigitalOcean if you\'re new to hosting.', redeem:'education.github.com/pack → Heroku → activate credits', after:'Your projects are live on the internet with minimal setup.' },
-  { id:'mongodb', name:'MongoDB', emoji:'🍃', type:'Hosting', defaultUrgency:'later', color:'var(--blue)', duration:'$50 credit + free courses', tagline:'Database for apps — stores user data, content, stats', baby:'When you build an app that needs to remember things — who signed up, what content exists — you need a database. MongoDB is one of the most popular. Think Excel but for apps.', learn:'Database basics, storing and retrieving data', prereqs:'Start building an actual app first.', whenRedeem:'When building an app that needs to store data.', clockStart:'Credit from activation.', expires:'After credit is used.', autoCharge:'After credit runs out.', renewable:'No.', tips:'Use Appwrite (already set up) for simple projects. MongoDB for more complex ones.', redeem:'education.github.com/pack → MongoDB → activate', after:'Build apps that store and retrieve real data.' },
-  { id:'localstack', name:'LocalStack', emoji:'🏠', type:'Dev Tools', defaultUrgency:'later', color:'var(--yellow)', duration:'Free with pack', tagline:'Fake cloud on your laptop — test for free before going live', baby:'LocalStack creates a fake version of cloud services on your own laptop so you can test for free, then deploy when ready.', learn:'Local cloud development, cost-effective testing', prereqs:'Building something that uses cloud services.', whenRedeem:'When working on cloud-based projects.', clockStart:'Active while student.', expires:'When student status ends.', autoCharge:'No.', renewable:'Yes.', tips:'Saves real money on cloud costs while developing.', redeem:'education.github.com/pack → LocalStack', after:'Test everything locally for free. Deploy with confidence.' },
-  { id:'datadog', name:'Datadog', emoji:'🐕', type:'Security', defaultUrgency:'later', color:'var(--orange)', duration:'2 years free', tagline:'24/7 monitor for your apps — alerts when anything breaks', baby:'Datadog watches your app 24/7 and immediately alerts you if anything goes wrong. Like a security camera that also sends you WhatsApp messages when someone breaks in.', learn:'Infrastructure monitoring, performance tracking', prereqs:'Have something live that people are actually using.', whenRedeem:'When running live apps with real users.', clockStart:'2 years from activation.', expires:'After 2 years.', autoCharge:'No.', renewable:'No.', tips:'Overkill until you have real users. Save it for then.', redeem:'education.github.com/pack → Datadog → 2 years free', after:'Know immediately when anything goes wrong. Fix before users notice.' },
-  { id:'new-relic', name:'New Relic', emoji:'📡', type:'Security', defaultUrgency:'later', color:'var(--orange)', duration:'Free while student (worth $300/month = ₹25,000/month)', tagline:'Most comprehensive monitoring — tracks everything in one dashboard', baby:'Like Datadog but more detailed. Tracks speed, errors, visitor count, load times — everything in one place. Worth ₹25,000 per month. Free for you.', learn:'Full-stack monitoring, performance optimisation', prereqs:'Have live projects with real traffic.', whenRedeem:'When running multiple serious live projects.', clockStart:'Active while student.', expires:'When student status ends.', autoCharge:'No.', renewable:'Yes.', tips:'Probably more than you need early on. Save for when you\'re running multiple client projects.', redeem:'education.github.com/pack → New Relic → student plan', after:'Complete visibility into how everything performs.' },
-  { id:'honeybadger', name:'Honeybadger', emoji:'🍯', type:'Security', defaultUrgency:'later', color:'var(--orange)', duration:'1 year free', tagline:'Alarm bell when something breaks on your website', baby:'If a button on your website stops working at 2am, Honeybadger immediately emails you. You fix it before your client even notices.', learn:'Error monitoring, uptime awareness', prereqs:'Have live websites or apps for clients.', whenRedeem:'When managing live websites for clients.', clockStart:'1 year from activation.', expires:'After 1 year.', autoCharge:'No.', renewable:'No.', tips:'Simpler than Sentry — easier to start with. Pick one: Honeybadger or Sentry.', redeem:'education.github.com/pack → Honeybadger → 1 year free', after:'Fix client issues before they notice. Look superhuman at client management.' },
-  { id:'sentry', name:'Sentry', emoji:'🔍', type:'Security', defaultUrgency:'later', color:'var(--orange)', duration:'1 year free', tagline:'Full investigation report when something breaks — more detail than Honeybadger', baby:'Honeybadger says "something broke." Sentry says here\'s exactly what broke, on what line, at what time, for which user, and why. Way more detail.', learn:'Advanced error tracking, debugging', prereqs:'Have live projects running.', whenRedeem:'When running live complex projects.', clockStart:'1 year from activation.', expires:'After 1 year.', autoCharge:'No.', renewable:'No.', tips:'More powerful than Honeybadger but more complex. Start with Honeybadger if new to monitoring.', redeem:'education.github.com/pack → Sentry → 1 year free', after:'Fix bugs faster. Impress clients with your response time.' },
-  { id:'astra', name:'AstraSecurity', emoji:'🛡️', type:'Security', defaultUrgency:'later', color:'var(--orange)', duration:'6 months free', tagline:'Security guard for websites you manage for clients', baby:'Scans websites for viruses, blocks hackers, alerts you if something suspicious happens. You can say "your website is protected by AstraSecurity" — very professional.', learn:'Basic web security, vulnerability scanning', prereqs:'Managing websites for clients.', whenRedeem:'When hosting/managing websites for clients.', clockStart:'6 months from activation.', expires:'After 6 months.', autoCharge:'Check their terms before activating.', renewable:'No.', tips:'Being able to offer "secured and monitored website management" is a premium service add-on.', redeem:'education.github.com/pack → AstraSecurity → 6 months', after:'Offer premium secured website management. Charge more. Clients trust you more.' },
-  { id:'dashlane', name:'Dashlane', emoji:'🗝️', type:'Security', defaultUrgency:'later', color:'var(--orange)', duration:'6 months free', tagline:'Backup password manager — use 1Password instead', baby:'Same as 1Password — stores passwords securely. You already have 1Password from this pack. Dashlane is a backup if 1Password doesn\'t work for some reason.', learn:'Password security', prereqs:'Already using 1Password.', whenRedeem:'Only if 1Password stops working for you.', clockStart:'6 months from activation.', expires:'After 6 months.', autoCharge:'No.', renewable:'No.', tips:'Just use 1Password. Dashlane is backup only.', redeem:'education.github.com/pack → Dashlane', after:'Backup secure password storage.' },
-  { id:'dailybot', name:'DailyBot', emoji:'🤝', type:'Productivity', defaultUrgency:'later', color:'var(--cyan)', duration:'6 months free (up to 10 users)', tagline:'Auto-update clients — scales your communication as you grow', baby:'DailyBot sends automatic scheduled check-in messages to clients. As you grow from 1 to 5 clients this becomes really important.', learn:'Client communication, automation', prereqs:'Have at least 2-3 paying clients.', whenRedeem:'Once you have 2+ clients.', clockStart:'6 months from activation.', expires:'After 6 months.', autoCharge:'No.', renewable:'No.', tips:'Not useful until you have multiple clients. Don\'t activate early.', redeem:'education.github.com/pack → DailyBot → 6 months', after:'Every client always feels updated. Never drop the ball on communication.' },
-  { id:'popsql', name:'PopSQL', emoji:'🔢', type:'Dev Tools', defaultUrgency:'later', color:'var(--yellow)', duration:'Free while student', tagline:'Beautiful interface for working with big data using SQL', baby:'SQL is a language for working with huge amounts of data. PopSQL is a beautiful clean app for writing SQL and sharing results.', learn:'SQL queries, working with large datasets', prereqs:'DataCamp SQL course first.', whenRedeem:'After completing DataCamp SQL content.', clockStart:'Active while student.', expires:'When student status ends.', autoCharge:'No.', renewable:'Yes.', tips:'Part of a data stack. Only useful if you go deep into data skills.', redeem:'education.github.com/pack → PopSQL', after:'Handle serious data work for clients professionally.' },
-  { id:'deepnote', name:'Deepnote', emoji:'📓', type:'Dev Tools', defaultUrgency:'later', color:'var(--yellow)', duration:'Free while student', tagline:'Data notebooks — present findings beautifully to clients', baby:'Like a Google Doc where you can also run code and show charts right inside it. Send a beautiful interactive document instead of a boring Excel file.', learn:'Data storytelling, presenting analysis visually', prereqs:'Python or SQL basics first.', whenRedeem:'After learning Python/SQL and doing data work for clients.', clockStart:'Active while student.', expires:'When student status ends.', autoCharge:'No.', renewable:'Yes.', tips:'Looks incredibly impressive to clients. When you have the data skills to use it.', redeem:'education.github.com/pack → Deepnote', after:'Deliver data reports that look like they came from a proper data team.' },
-  { id:'zyte', name:'Zyte', emoji:'🕷️', type:'Dev Tools', defaultUrgency:'later', color:'var(--yellow)', duration:'Free forever', tagline:'Web scraping robot — auto-collect lead lists', baby:'Instead of manually finding 500 D2C founders to pitch, Zyte does it automatically. Lead lists are a sellable product on their own.', learn:'Web scraping, data collection, lead generation automation', prereqs:'Basic Python first.', whenRedeem:'After learning Python basics.', clockStart:'Free forever — no rush.', expires:'Never.', autoCharge:'No.', renewable:'Always active.', tips:'Once you learn basic Python this becomes very powerful for outreach.', redeem:'education.github.com/pack → Zyte', after:'Generate lead lists automatically. Supercharge your own outreach. Sell lists to other businesses.' },
-  { id:'jetbrains', name:'JetBrains', emoji:'⚡', type:'Dev Tools', defaultUrgency:'later', color:'var(--yellow)', duration:'Free while student (worth ₹8,000/year)', tagline:'Professional code editor — what big company devs use', baby:'The fancy professional code editor — the one developers at Google and Amazon use. Start with VS Code (free for everyone) and move to JetBrains later.', learn:'Professional coding environment, advanced code tools', prereqs:'Learn basics with VS Code first.', whenRedeem:'After you\'re comfortable with basic coding.', clockStart:'Active while student. Renews yearly.', expires:'When student status ends.', autoCharge:'No.', renewable:'Yes — renews yearly while student.', tips:'Don\'t start here. VS Code is simpler and free for everyone. Come back to JetBrains when VS Code feels limiting.', redeem:'education.github.com/pack → JetBrains → student license', after:'Code like a professional developer at any company.' },
-  { id:'browserstack', name:'BrowserStack', emoji:'📱', type:'Dev Tools', defaultUrgency:'later', color:'var(--yellow)', duration:'1 year free', tagline:'Test your websites on 2000+ real devices without owning them', baby:'BrowserStack gives you access to 2000+ real devices online. Paste your website link and instantly see how it looks on any device.', learn:'Cross-device testing, quality assurance', prereqs:'Start building websites for clients first.', whenRedeem:'When building and delivering websites for clients.', clockStart:'1 year from activation.', expires:'After 1 year.', autoCharge:'No.', renewable:'No.', tips:'Very useful when delivering client websites. Ensures no broken layouts on any device.', redeem:'education.github.com/pack → BrowserStack → 1 year', after:'Websites you deliver work perfectly on every device.' },
-  { id:'polypane', name:'Polypane', emoji:'🪟', type:'Dev Tools', defaultUrgency:'later', color:'var(--yellow)', duration:'1 year free', tagline:'See your website on phone + tablet + laptop simultaneously', baby:'Instead of testing one screen size at a time, Polypane shows all of them side by side at once. Change something and it updates everywhere instantly.', learn:'Responsive design testing', prereqs:'Building websites.', whenRedeem:'When actively building websites.', clockStart:'1 year from activation.', expires:'After 1 year.', autoCharge:'No.', renewable:'No.', tips:'Use alongside BrowserStack. Polypane for design work, BrowserStack for final testing.', redeem:'education.github.com/pack → Polypane → 1 year', after:'Build responsive websites way faster.' },
-  { id:'gitkraken', name:'GitKraken', emoji:'🐙', type:'Dev Tools', defaultUrgency:'later', color:'var(--yellow)', duration:'6 months free', tagline:'Visual GitHub management — buttons instead of scary commands', baby:'Managing GitHub normally requires typing commands in a black screen. GitKraken makes it all visual — click buttons, drag and drop, see everything clearly.', learn:'Advanced version control, visual git workflow', prereqs:'Basic GitHub usage first.', whenRedeem:'When managing complex projects with lots of changes.', clockStart:'6 months from activation.', expires:'After 6 months.', autoCharge:'No.', renewable:'No.', tips:'GitHub Desktop (free for everyone) is enough for most things. GitKraken for complex projects.', redeem:'education.github.com/pack → GitKraken → 6 months', after:'Manage complex projects without the command line.' },
-  { id:'tower', name:'Tower', emoji:'🗼', type:'Dev Tools', defaultUrgency:'later', color:'var(--yellow)', duration:'Free while student', tagline:'Most advanced git client — for complex multi-project work', baby:'GitHub Desktop is basic. GitKraken is intermediate. Tower is the most advanced — what professional agencies use when managing many projects simultaneously.', learn:'Professional project management', prereqs:'Comfortable with GitHub Desktop and GitKraken first.', whenRedeem:'When you outgrow other git tools.', clockStart:'Active while student.', expires:'When student status ends.', autoCharge:'No.', renewable:'Yes.', tips:'Probably don\'t need this for a very long time. GitHub Desktop → GitKraken → Tower.', redeem:'education.github.com/pack → Tower', after:'Manage complex multi-project development at agency level.' },
-  { id:'xojo', name:'Xojo', emoji:'🖥️', type:'Dev Tools', defaultUrgency:'later', color:'var(--yellow)', duration:'Free while student', tagline:'Build desktop and mobile apps visually', baby:'Like Bootstrap Studio but for desktop and mobile apps. Build a proper application someone downloads and installs without deep coding knowledge.', learn:'Desktop/mobile app development', prereqs:'Basic coding concepts first.', whenRedeem:'When you want to build and sell downloadable apps.', clockStart:'Active while student.', expires:'When student status ends.', autoCharge:'No.', renewable:'Yes.', tips:'Good for building tools you can sell as one-time products.', redeem:'education.github.com/pack → Xojo', after:'Build and sell downloadable desktop/mobile apps.' },
-  { id:'blockchair', name:'Blockchair', emoji:'₿', type:'Dev Tools', defaultUrgency:'later', color:'var(--yellow)', duration:'100,000 free API requests', tagline:'Crypto and blockchain data — only if relevant to you', baby:'If you ever build something that works with Bitcoin, Ethereum, or blockchain data — Blockchair gives you access to all of that data automatically. Very niche.', learn:'Blockchain data, crypto APIs', prereqs:'Specific crypto/blockchain project in mind.', whenRedeem:'Only if you actively decide to build in crypto/web3.', clockStart:'Requests don\'t expire.', expires:'Never — request based.', autoCharge:'No.', renewable:'No.', tips:'Completely ignore this unless crypto becomes relevant to you.', redeem:'education.github.com/pack → Blockchair', after:'Build crypto-related tools and products.' },
-  { id:'configcat', name:'ConfigCat', emoji:'🎛️', type:'Dev Tools', defaultUrgency:'later', color:'var(--yellow)', duration:'Free forever', tagline:'Turn features on/off for specific users — for real products', baby:'When you have a real product and want to test a new feature with 10% of users first — ConfigCat lets you do that without rebuilding anything.', learn:'Feature management, safe product releases', prereqs:'Running a real product with actual users.', whenRedeem:'When you have a real product.', clockStart:'Free forever.', expires:'Never.', autoCharge:'No.', renewable:'Always.', tips:'Very useful once you have a real product. Completely irrelevant before that.', redeem:'education.github.com/pack → ConfigCat', after:'Release features safely. Test before full rollout.' },
-  { id:'workingcopy', name:'WorkingCopy', emoji:'📲', type:'Dev Tools', defaultUrgency:'later', color:'var(--yellow)', duration:'Free while student', tagline:'GitHub Desktop for your iPhone — update projects from your phone', baby:'WorkingCopy is GitHub Desktop but for iPhone. On the go and need to make a quick update to your portfolio? Do it from your phone.', learn:'Mobile git management', prereqs:'iPhone and active GitHub usage.', whenRedeem:'If you have an iPhone and want mobile GitHub access.', clockStart:'Active while student.', expires:'When student status ends.', autoCharge:'No.', renewable:'Yes.', tips:'Not essential but very convenient.', redeem:'education.github.com/pack → WorkingCopy → App Store', after:'Update your projects from anywhere.' }
+  {
+    id:'codedex', name:'Codedex', emoji:'🎮', type:'Learning',
+    defaultUrgency:'now', color:'var(--purple)',
+    duration:'6 months free',
+    tagline:'Learn to code from zero — feels like a game, built for Gen Z',
+    baby:'This is your starting point for coding. It teaches you Python, HTML, CSS, JavaScript — but it feels like playing a game, not studying. You earn XP, level up, complete challenges. Made specifically for people who have never touched code in their life.',
+    learn:'Python basics, HTML, CSS, JavaScript fundamentals',
+    prereqs:'Zero. Absolute zero. Start here.',
+    whenRedeem:'NOW — this is your entry point. Activate and start immediately.',
+    clockStart:'Clock starts the moment you activate. You have 6 months from that day.',
+    expires:'After 6 months you lose access to premium content. Free tier stays but is limited.',
+    autoCharge:'No automatic charge — they will email you before it ends. You choose to pay or not.',
+    renewable:'No — one time student benefit.',
+    tips:'Pick ONE language to start — go with Python. Don\'t jump between languages. Go in order. 30 mins a day beats 3 hours once a week.',
+    redeem:'education.github.com/pack → find Codedex → click Get Access → sign in with GitHub',
+    after:'You can write basic Python scripts, understand how code works, and start building simple things. This unlocks everything else.'
+  },
+  {
+    id:'datacamp', name:'DataCamp', emoji:'📈', type:'Learning',
+    defaultUrgency:'now', color:'var(--purple)',
+    duration:'3 months free',
+    tagline:'Data skills — the fastest way to charge more per client',
+    baby:'DataCamp teaches you to work with data. Think Excel but way more powerful. You learn Python for data, making charts and dashboards, analysing what\'s working. Interactive lessons — you practice as you watch, not just sit and watch.',
+    learn:'Data analysis, Python for data, making dashboards, SQL basics',
+    prereqs:'Basic Codedex Python first — just 2-3 weeks of Codedex before starting this.',
+    whenRedeem:'Start Codedex first. Activate DataCamp 2-3 weeks in when you have basic Python.',
+    clockStart:'Clock starts on activation. Only 3 months so time it right.',
+    expires:'After 3 months you lose access. Premium content gone.',
+    autoCharge:'No automatic charge. They email you. You decide.',
+    renewable:'No — one time.',
+    tips:'⚠️ Only 3 months — do NOT activate before you\'re ready to actually use it. This goes fast. Once activated, treat it like a sprint.',
+    redeem:'education.github.com/pack → DataCamp → Get Access → connect GitHub',
+    after:'You can offer "data + strategy" to clients — not just content. You analyse what\'s working and report on it. Clients pay significantly more for this.'
+  },
+  {
+    id:'frontendmasters', name:'FrontendMasters', emoji:'🏗️', type:'Learning',
+    defaultUrgency:'now', color:'var(--purple)',
+    duration:'6 months free (worth $390 / ₹32,000)',
+    tagline:'Build websites — add ₹15k–₹30k to what you can charge',
+    baby:'Video lessons that teach you to build websites from scratch. Proper structured courses, not random YouTube videos. This is what web developers use to level up. If a client asks "can you build me a landing page?" — after this, you say yes.',
+    learn:'Web development, JavaScript, building real functional websites',
+    prereqs:'Basic HTML/CSS from Codedex first — about 3-4 weeks in.',
+    whenRedeem:'After you have HTML/CSS basics from Codedex. Don\'t activate before.',
+    clockStart:'Clock starts on activation. 6 months.',
+    expires:'After 6 months, access gone. Very worth using intensively.',
+    autoCharge:'No automatic charge.',
+    renewable:'No — one time.',
+    tips:'Don\'t try to learn everything. Pick the JavaScript path and go deep. Depth beats breadth.',
+    redeem:'education.github.com/pack → FrontendMasters → 6 months free → connect GitHub',
+    after:'You can build landing pages and portfolio sites for clients. Charge ₹15k–₹30k per page. Also makes your own portfolio dramatically better.'
+  },
+  {
+    id:'scrimba', name:'Scrimba', emoji:'💻', type:'Learning',
+    defaultUrgency:'soon', color:'var(--purple)',
+    duration:'1 month free — SHORT',
+    tagline:'Most hands-on coding learning — type inside the video itself',
+    baby:'Imagine watching a cooking video and being able to reach inside the screen and actually cook along in real time. That\'s Scrimba. The video pauses, you type code directly inside it, it checks your answer, you continue. Most interactive way to learn coding.',
+    learn:'JavaScript, CSS, React, Python — same topics as others but hands-on',
+    prereqs:'Basic coding concepts from Codedex first.',
+    whenRedeem:'⚠️ Only 1 month — save this for when you can go ALL IN. Pick a week where you have maximum free time and burn through it.',
+    clockStart:'Clock starts on activation. Only 30 days.',
+    expires:'After 1 month, gone. Use it intensively.',
+    autoCharge:'No automatic charge.',
+    renewable:'No.',
+    tips:'Do NOT activate casually. This is a sprint tool. Plan it — pick your month, clear your schedule, then activate and go hard. Treat it like a bootcamp month.',
+    redeem:'education.github.com/pack → Scrimba → 1 month free',
+    after:'Intensive hands-on coding skills in 1 month if you go hard. Best for cementing what you learned from Codedex.'
+  },
+  {
+    id:'gorails', name:'GoRails', emoji:'🛤️', type:'Learning',
+    defaultUrgency:'later', color:'var(--purple)',
+    duration:'12 months free — longest of any platform',
+    tagline:'Build real web apps fast — longest free period in the pack',
+    baby:'Teaches you to build complete working web applications using Ruby on Rails. Not just theory — you build real things that work. Ruby on Rails is a framework that lets you build apps really fast without needing to know everything.',
+    learn:'Ruby on Rails, building full web apps, databases, user accounts',
+    prereqs:'Solid HTML/CSS/JavaScript basics first. Do Codedex + FrontendMasters first.',
+    whenRedeem:'After you have basics from Codedex and FrontendMasters. This is level 2.',
+    clockStart:'Clock starts on activation. 12 months — generous.',
+    expires:'After 12 months.',
+    autoCharge:'No automatic charge.',
+    renewable:'No.',
+    tips:'Best saved for when you\'re ready to build and sell actual products. Don\'t rush to this — build foundations first.',
+    redeem:'education.github.com/pack → GoRails → 12 months free',
+    after:'Build and sell web apps and tools. Significantly higher income — products vs services.'
+  },
+  {
+    id:'educative', name:'Educative', emoji:'📚', type:'Learning',
+    defaultUrgency:'later', color:'var(--purple)',
+    duration:'6 months free',
+    tagline:'Interactive textbooks — read and practice on the same page',
+    baby:'Like a textbook where you read a concept then immediately practice it right there on the page without switching tabs. More structured than videos. Good if you prefer reading to watching. 70+ courses.',
+    learn:'Web dev, Python, machine learning basics, system design',
+    prereqs:'None — but better after some Codedex basics.',
+    whenRedeem:'After Codedex. Use if video courses aren\'t working for you.',
+    clockStart:'Clock starts on activation. 6 months.',
+    expires:'After 6 months.',
+    autoCharge:'No automatic charge.',
+    renewable:'No.',
+    tips:'Pick ONE course and finish it. Don\'t browse and switch. Completion beats exploration.',
+    redeem:'education.github.com/pack → Educative → 6 months',
+    after:'Structured coding and data skills with a more academic approach.'
+  },
+  {
+    id:'algoexpert', name:'AlgoExpert', emoji:'🧠', type:'Learning',
+    defaultUrgency:'later', color:'var(--purple)',
+    duration:'20 free problems + 10% discount',
+    tagline:'Coding interview prep — for when you want a proper tech job',
+    baby:'Tech companies make you solve coding puzzles in interviews. AlgoExpert prepares you for exactly that. Not for right now — this is for when you decide you want to apply for a real tech job or internship.',
+    learn:'Algorithms, problem solving, coding interview patterns',
+    prereqs:'Solid coding foundations — do everything else first.',
+    whenRedeem:'Only when actively applying for tech jobs.',
+    clockStart:'Discount is always available. Problems are one time.',
+    expires:'No expiry on discount.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'Don\'t worry about this until you\'re job hunting. Not relevant to freelancing.',
+    redeem:'education.github.com/pack → AlgoExpert',
+    after:'Pass coding interviews at tech companies. Better paid opportunities.'
+  },
+  {
+    id:'1password', name:'1Password', emoji:'🔐', type:'Security',
+    defaultUrgency:'now', color:'var(--orange)',
+    duration:'1 year free',
+    tagline:'Secure password locker — you\'re managing someone\'s LinkedIn RIGHT NOW',
+    baby:'You manage someone\'s LinkedIn. That means you know their password. What if you forget it? What if you get hacked? 1Password is a super secure digital locker. You put all passwords in it. Only you can open it. Everything is encrypted.',
+    learn:'Professional credential management, digital security basics',
+    prereqs:'None — download and use immediately.',
+    whenRedeem:'TODAY. You already have someone\'s login credentials. Do this now.',
+    clockStart:'Clock starts on activation. 1 year.',
+    expires:'After 1 year, free tier is very limited. But by then you\'ll be earning enough to pay.',
+    autoCharge:'They may ask for card at end — read the email they send before expiry.',
+    renewable:'No — one time student benefit.',
+    tips:'When pitching to clients say "I use 1Password to keep your credentials 100% secure." Instantly more professional than every other freelancer they\'ve talked to.',
+    redeem:'education.github.com/pack → 1Password Teams → activate',
+    after:'Your clients\' accounts are safe. You look professional. You never forget a password. You can pitch security as part of your service.'
+  },
+  {
+    id:'slidecoach', name:'SlideCoach', emoji:'🎤', type:'Productivity',
+    defaultUrgency:'now', color:'var(--cyan)',
+    duration:'2000 free credits = 40 full practice sessions',
+    tagline:'AI pitch coach — practice client calls before the real thing',
+    baby:'You\'re going to get on calls with potential clients. SlideCoach is an AI you practice your pitch with first — in private. You present to it, it records you, watches how you speak, then gives detailed feedback: "you said um 12 times", "your energy dropped at the end", "you spoke too fast here."',
+    learn:'Pitching, presenting, public speaking confidence, handling objections',
+    prereqs:'None. Use before any client call.',
+    whenRedeem:'Now — before your next outreach call or pitch.',
+    clockStart:'Credits based, not time based. 2000 credits = ~40 sessions. Use at your own pace.',
+    expires:'Credits don\'t expire.',
+    autoCharge:'No.',
+    renewable:'No — one time.',
+    tips:'Practice your exact pitch — don\'t improvise in practice. Say exactly what you\'d say to a real client. Repeat until it feels natural.',
+    redeem:'education.github.com/pack → SlideCoach → activate',
+    after:'You go into every client call having already done it 5 times. You sound confident, clear, and prepared. Converts better.'
+  },
+  {
+    id:'pomodone', name:'PomoDone', emoji:'⏱️', type:'Productivity',
+    defaultUrgency:'now', color:'var(--cyan)',
+    duration:'2 years free',
+    tagline:'Focus timer — juggling college + internship + learning is hard',
+    baby:'Work 25 minutes, take a 5 minute break, repeat. Called the Pomodoro technique. It\'s scientifically proven to help you focus and avoid burnout. PomoDone runs that timer and tracks how many hours you actually worked each day — not how many hours you sat at a desk.',
+    learn:'Time management, tracking real work hours, avoiding burnout',
+    prereqs:'None.',
+    whenRedeem:'Now — helps immediately.',
+    clockStart:'2 years from activation.',
+    expires:'After 2 years.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'The point isn\'t the timer — it\'s building the habit of focused work. After 1 week you\'ll be shocked how much more you get done.',
+    redeem:'education.github.com/pack → PomoDone → 2 years free',
+    after:'You actually know how many hours you worked. You\'re more focused. Less burnout. More output.'
+  },
+  {
+    id:'imgbot', name:'Imgbot', emoji:'🖼️', type:'Dev Tools',
+    defaultUrgency:'now', color:'var(--yellow)',
+    duration:'Free while student',
+    tagline:'Auto-shrinks your portfolio images — zero effort required',
+    baby:'Images on your portfolio website make it load slowly if they\'re too big. Imgbot connects to your GitHub and automatically shrinks all images to the perfect size without making them look worse. It just runs in the background — you don\'t do anything.',
+    learn:'Nothing — it\'s fully automatic',
+    prereqs:'Have a GitHub repository with images (you do).',
+    whenRedeem:'Now — easy win, zero effort.',
+    clockStart:'Active while you\'re a student.',
+    expires:'When you lose student status.',
+    autoCharge:'No.',
+    renewable:'Yes — renews with your student pack.',
+    tips:'Just activate and forget it. It opens pull requests automatically when it finds images to compress — just click merge.',
+    redeem:'education.github.com/pack → Imgbot → Install on your repositories',
+    after:'Portfolio loads faster. Better Google ranking. Better user experience for potential clients.'
+  },
+  {
+    id:'github-cert', name:'GitHub Certification', emoji:'🏆', type:'Dev Tools',
+    defaultUrgency:'now', color:'var(--yellow)',
+    duration:'1 free exam voucher — ⚠️ EXPIRES JUNE 30 2026',
+    tagline:'Real certified credential for your LinkedIn — worth ₹8,000',
+    baby:'GitHub gives you one free exam to get officially certified. Like a real qualification you can put on your LinkedIn and portfolio. Get GitHub Foundations — it proves you know how to use GitHub. Clients see it and it adds credibility.',
+    learn:'GitHub fundamentals, version control, collaboration',
+    prereqs:'You already use GitHub for your portfolio — you probably know enough. Do a quick practice test first.',
+    whenRedeem:'⚠️ URGENT — expires June 30 2026. Do this soon. Study for 1-2 weeks then take the exam.',
+    clockStart:'Voucher must be used before June 30 2026.',
+    expires:'June 30 2026 — after that the free voucher is gone forever.',
+    autoCharge:'No.',
+    renewable:'No — one time.',
+    tips:'This is time-sensitive. Don\'t sleep on it. Study for 1-2 weeks, take the GitHub Foundations exam, get the cert on your LinkedIn. It\'s a real credential that costs ₹8,000 normally.',
+    redeem:'education.github.com/pack → GitHub Certification → claim voucher → choose GitHub Foundations',
+    after:'Official GitHub certified badge on your LinkedIn and portfolio. Looks very legitimate to clients.'
+  },
+  {
+    id:'notion', name:'Notion', emoji:'📋', type:'Productivity',
+    defaultUrgency:'soon', color:'var(--cyan)',
+    duration:'Free while student (Notion Plus plan)',
+    tagline:'Your work OS — manage clients, content, everything in one place',
+    baby:'Like Google Docs + Google Sheets combined but way more organised and beautiful. You can build a dashboard to track which clients you\'re talking to, plan content for the week, store proposals, track follow-ups. Everything in one place instead of scattered across Google Drive.',
+    learn:'Digital organisation, client management, building systems',
+    prereqs:'None.',
+    whenRedeem:'When you land your first client or start serious outreach.',
+    clockStart:'Active while student.',
+    expires:'When you lose student status.',
+    autoCharge:'No.',
+    renewable:'Yes — renews with student pack.',
+    tips:'Don\'t over-engineer it at the start. Begin with a simple client tracker — name, status, last contact, next step. Expand as you grow.',
+    redeem:'notion.so → sign up → Settings → Education → verify student status via GitHub',
+    after:'Never lose track of a lead or client. Look organised and professional. Scale to multiple clients without chaos.'
+  },
+  {
+    id:'visme', name:'Visme', emoji:'📊', type:'Design',
+    defaultUrgency:'soon', color:'var(--pink)',
+    duration:'3 months free',
+    tagline:'Beautiful proposals and reports — make clients think you\'ve done this for years',
+    baby:'Like PowerPoint but dramatically more beautiful. You use it to make pitch decks when approaching clients, weekly reports showing their LinkedIn growth, proposals when they ask "what exactly will you do for me?" Instead of sending a Google Doc you send something that looks like it came from an agency.',
+    learn:'Visual communication, client reporting, proposal design',
+    prereqs:'None.',
+    whenRedeem:'When you start sending proposals to clients. Don\'t activate until then.',
+    clockStart:'Clock starts on activation. Only 3 months.',
+    expires:'After 3 months — they will email you.',
+    autoCharge:'May require card for after trial. Read their email before expiry.',
+    renewable:'No.',
+    tips:'⚠️ Only 3 months — activate when you\'re actively pitching clients, not before. Time it with your outreach push.',
+    redeem:'education.github.com/pack → Visme → 3 months free',
+    after:'Your proposals look so polished clients assume you\'ve been doing this for years. Higher conversion on pitches.'
+  },
+  {
+    id:'icons8', name:'Icons8', emoji:'🎨', type:'Design',
+    defaultUrgency:'soon', color:'var(--pink)',
+    duration:'3 months free',
+    tagline:'Millions of free icons and images for posts and proposals',
+    baby:'When making LinkedIn posts or proposals you need visuals. Icons8 gives you millions of icons, photos, and illustrations — all free to use with no copyright issues. Way better and safer than Googling images.',
+    learn:'Using professional design assets',
+    prereqs:'None.',
+    whenRedeem:'When actively creating content for clients.',
+    clockStart:'3 months from activation.',
+    expires:'After 3 months.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'Activate when you have content to create — don\'t waste the 3 months being idle.',
+    redeem:'education.github.com/pack → Icons8 → activate',
+    after:'Every post and proposal uses professional visuals. Looks premium.'
+  },
+  {
+    id:'iconscout', name:'IconScout', emoji:'✨', type:'Design',
+    defaultUrgency:'soon', color:'var(--pink)',
+    duration:'60 free premium icons/month for 1 year',
+    tagline:'4.9 million icons, 3D images and animations',
+    baby:'Same idea as Icons8 but bigger library — 4.9 million assets including 3D images and animations. Between Icons8 and IconScout you basically have unlimited professional visuals for anything you create.',
+    learn:'Using premium design assets',
+    prereqs:'None.',
+    whenRedeem:'When actively creating content.',
+    clockStart:'1 year from activation.',
+    expires:'After 1 year.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'You get 60 free premium icons per month — use them strategically for your best posts and proposals.',
+    redeem:'education.github.com/pack → IconScout → activate',
+    after:'Everything you create looks premium and professional.'
+  },
+  {
+    id:'simple-analytics', name:'SimpleAnalytics', emoji:'📉', type:'Productivity',
+    defaultUrgency:'soon', color:'var(--cyan)',
+    duration:'1 year free',
+    tagline:'See who\'s actually visiting your portfolio and from where',
+    baby:'You already have Google Analytics but SimpleAnalytics is simpler and privacy-friendly. When you send your portfolio link to potential clients during outreach — you can see who actually clicked it, where they came from, what they looked at.',
+    learn:'Website analytics, understanding visitor behaviour',
+    prereqs:'None.',
+    whenRedeem:'When doing active outreach campaigns.',
+    clockStart:'1 year from activation.',
+    expires:'After 1 year.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'Good backup to Google Analytics — simpler dashboard, no cookie banners needed.',
+    redeem:'education.github.com/pack → SimpleAnalytics → activate',
+    after:'Know exactly which outreach is working. See who\'s opening your portfolio link.'
+  },
+  {
+    id:'testmail', name:'Testmail', emoji:'✉️', type:'Productivity',
+    defaultUrgency:'soon', color:'var(--cyan)',
+    duration:'Free while student',
+    tagline:'Test your outreach emails before sending to real clients',
+    baby:'Before sending an important outreach email to a client, you want to see exactly how it looks in their inbox. Testmail gives you unlimited test email addresses to send to first. You can check if images load, if formatting looks right, if links work.',
+    learn:'Email testing, professional outreach',
+    prereqs:'None.',
+    whenRedeem:'When doing email outreach campaigns.',
+    clockStart:'Active while student.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes.',
+    tips:'Always test before sending to real people. One bad-looking email can kill a great pitch.',
+    redeem:'education.github.com/pack → Testmail → activate',
+    after:'Every email you send looks exactly as intended. No broken formatting, no missing images.'
+  },
+  {
+    id:'stripe', name:'Stripe', emoji:'💳', type:'Payments',
+    defaultUrgency:'soon', color:'var(--green)',
+    duration:'Zero fees on first $1,000 earned (≈₹83,000)',
+    tagline:'Get paid by international clients in dollars',
+    baby:'Your global portfolio has prices in dollars — $299, $599, $999. An American or European client cannot pay you on GPay. Stripe lets them pay by card in dollars, straight to your account, professionally. Like a real business.',
+    learn:'International payments, payment processing basics',
+    prereqs:'None — but activate when you have a client ready to pay.',
+    whenRedeem:'When you have your first international client ready to pay. Not before.',
+    clockStart:'Fee waiver on first $1000 earned from signup.',
+    expires:'The fee waiver is one time. Stripe itself stays active.',
+    autoCharge:'No.',
+    renewable:'No — one time benefit.',
+    tips:'Don\'t activate just to have it. Activate when someone is ready to pay you. The $1000 fee waiver is the main benefit — you keep every rupee of your first ₹83,000.',
+    redeem:'stripe.com → create account → verify identity → add bank account for payouts',
+    after:'You can accept card payments from anywhere in the world. Your global pricing becomes real.'
+  },
+  {
+    id:'namecheap', name:'Namecheap', emoji:'🌐', type:'Domain',
+    defaultUrgency:'soon', color:'var(--red)',
+    duration:'1 year free (.me domain)',
+    tagline:'Get nainabajaj.me — looks professional vs the github.io link',
+    baby:'Your portfolio is at nainabajaj2006.github.io right now — that immediately says "student". Namecheap lets you get a proper domain like nainabajaj.me for free for 1 year. Same website, professional address.',
+    learn:'Domain management, DNS basics',
+    prereqs:'Have a portfolio worth pointing a domain at first.',
+    whenRedeem:'When your portfolio is polished and you\'re actively sharing it with clients.',
+    clockStart:'1 year from activation.',
+    expires:'After 1 year you pay to renew — roughly ₹800-1200/year. Worth it.',
+    autoCharge:'They\'ll email renewal notice. You choose to renew or not.',
+    renewable:'Pay to renew after first year.',
+    tips:'Free domain is .me extension. Professional looking, widely accepted. Better than .github.io.',
+    redeem:'education.github.com/pack → Namecheap → get free .me domain → point to GitHub Pages',
+    after:'Professional domain for your portfolio. Clients take you more seriously immediately.'
+  },
+  {
+    id:'name-com', name:'Name.com', emoji:'🔗', type:'Domain',
+    defaultUrgency:'soon', color:'var(--red)',
+    duration:'1 year free (25+ extensions available)',
+    tagline:'Second free domain — .live, .studio, .app, .dev options',
+    baby:'Same as Namecheap but different domain endings. While Namecheap gives you .me — Name.com gives you options like nainabajaj.live, nainabajaj.studio, nainabajaj.app. You have TWO free domains from your pack. Use one for India portfolio, one for global.',
+    learn:'Domain management',
+    prereqs:'None.',
+    whenRedeem:'When ready to go professional with your portfolio.',
+    clockStart:'1 year from activation.',
+    expires:'After 1 year — pay to renew.',
+    autoCharge:'Renewal email sent. You choose.',
+    renewable:'Pay to renew.',
+    tips:'.live or .studio sounds modern and creative. Good for a personal brand.',
+    redeem:'education.github.com/pack → Name.com → choose your extension → activate',
+    after:'Two professional domain options. One for each portfolio.'
+  },
+  {
+    id:'pageclip', name:'Pageclip', emoji:'📬', type:'Dev Tools',
+    defaultUrgency:'soon', color:'var(--yellow)',
+    duration:'Free while student',
+    tagline:'Make your portfolio contact form actually work',
+    baby:'Right now if someone fills in "contact me" on your portfolio does it actually send you anything? Probably not. Pageclip makes that work — no complicated code needed. Someone fills the form, you get their message. Simple.',
+    learn:'Basic form handling',
+    prereqs:'Have a portfolio with a contact form.',
+    whenRedeem:'When updating your portfolio.',
+    clockStart:'Active while student.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes.',
+    tips:'Makes a real difference to conversion — clients can actually reach you without going to find your email separately.',
+    redeem:'education.github.com/pack → Pageclip → install on your GitHub Pages site',
+    after:'Potential clients can contact you directly from your portfolio. More inbound.'
+  },
+  {
+    id:'bootstrap-studio', name:'Bootstrap Studio', emoji:'🧱', type:'Dev Tools',
+    defaultUrgency:'soon', color:'var(--yellow)',
+    duration:'Free while student',
+    tagline:'Build websites by drag and drop — like Lego',
+    baby:'Instead of writing all the code from scratch you drag and drop pieces together to build websites. Like building with Lego. You can make a full professional website without knowing much code. Great for building client landing pages early on.',
+    learn:'Visual web design, basic HTML/CSS structure',
+    prereqs:'None — very beginner friendly.',
+    whenRedeem:'When you want to build landing pages for clients.',
+    clockStart:'Active while student.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes.',
+    tips:'Good bridge between no-code and actual coding. Use it while learning proper code.',
+    redeem:'education.github.com/pack → Bootstrap Studio → download app',
+    after:'Build and sell landing pages for clients. Charge ₹10k–₹20k per page even as a beginner.'
+  },
+  {
+    id:'github-pages', name:'GitHub Pages', emoji:'🌍', type:'Hosting',
+    defaultUrgency:'now', color:'var(--blue)',
+    duration:'Free forever (while on GitHub)',
+    tagline:'Free hosting — already using this for your portfolios',
+    baby:'This is where both your portfolios and this dashboard live. GitHub gives you free "land" on the internet to host websites. You\'re already using it — nothing to set up.',
+    learn:'Already using it!',
+    prereqs:'Already active.',
+    whenRedeem:'Already active — nothing to do.',
+    clockStart:'Always active.',
+    expires:'Never — free forever.',
+    autoCharge:'No.',
+    renewable:'Always active.',
+    tips:'You can have multiple GitHub Pages sites — one per repository. Use it for all your projects.',
+    redeem:'Already active!',
+    after:'Host unlimited projects for free.'
+  },
+  {
+    id:'github-copilot', name:'GitHub Copilot', emoji:'🤖', type:'Dev Tools',
+    defaultUrgency:'soon', color:'var(--yellow)',
+    duration:'Free while student',
+    tagline:'AI that writes code next to you — like autocomplete but for coding',
+    baby:'When you\'re typing on WhatsApp it suggests the next word. GitHub Copilot does the same but for code. While you\'re learning and writing code, Copilot suggests what to write next. You spend less time stuck, learn faster, and write more code.',
+    learn:'AI-assisted coding, faster development',
+    prereqs:'Start Codedex first. Activate this once you\'re actively writing code.',
+    whenRedeem:'After 2-3 weeks of Codedex — once you\'re actually writing code daily.',
+    clockStart:'Active while student.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes — renews with student pack.',
+    tips:'Don\'t activate before you start coding. The whole point is to help you while you\'re coding — useless if you\'re not writing code yet.',
+    redeem:'github.com → Settings → Copilot → Enable (auto-active with student pack)',
+    after:'You code faster, get stuck less. Learning speed roughly doubles.'
+  },
+  {
+    id:'digitalocean', name:'DigitalOcean', emoji:'🌊', type:'Hosting',
+    defaultUrgency:'later', color:'var(--blue)',
+    duration:'$200 credit (≈₹16,500) — valid 1 year',
+    tagline:'Your own server — host apps, tools, anything you build',
+    baby:'For a website to be on the internet it needs to be stored on a computer that\'s always on. That\'s a server. DigitalOcean rents you server space. When you build something beyond a simple website — a tool, an app — this is where it lives.',
+    learn:'Server management, deploying applications, cloud basics',
+    prereqs:'Have something to host. Do all learning platforms first.',
+    whenRedeem:'Only when you have something ready to deploy. Don\'t waste the $200 on nothing.',
+    clockStart:'$200 credit valid for 1 year from activation.',
+    expires:'After 1 year credits expire. Then pay as you go.',
+    autoCharge:'Requires credit card — charges after credit runs out. Monitor usage.',
+    renewable:'No — one time credit.',
+    tips:'⚠️ Requires a credit card. Be careful with this one — only activate when you have a specific project. DigitalOcean charges you when credit runs out.',
+    redeem:'education.github.com/pack → DigitalOcean → $200 credit → add card',
+    after:'Host any app or tool you build on the internet. Your own real server.'
+  },
+  {
+    id:'azure', name:'Microsoft Azure', emoji:'☁️', type:'Hosting',
+    defaultUrgency:'later', color:'var(--blue)',
+    duration:'$100 credit (≈₹8,300)',
+    tagline:'Microsoft\'s cloud — AI tools and automation',
+    baby:'Like DigitalOcean but made by Microsoft. Has extra AI tools on top. Think about automating parts of your work — generating reports automatically, analysing LinkedIn data without manually doing it. Azure is what powers that kind of stuff.',
+    learn:'Cloud computing, AI APIs, basic automation',
+    prereqs:'Have a specific project needing cloud or AI features.',
+    whenRedeem:'Only when you have a specific use case.',
+    clockStart:'$100 credit valid 30 days from activation — use it or lose it.',
+    expires:'Credit expires 30 days after activation. Then pay as you go.',
+    autoCharge:'Requires card. Will charge after credit.',
+    renewable:'No — one time.',
+    tips:'⚠️ Only 30 days to use the $100 credit — very short. Only activate when you have something specific planned.',
+    redeem:'education.github.com/pack → Azure → $100 credit',
+    after:'Cloud and AI capabilities. Automate parts of your workflow.'
+  },
+  {
+    id:'appwrite', name:'Appwrite', emoji:'🔧', type:'Hosting',
+    defaultUrgency:'now', color:'var(--blue)',
+    duration:'Free your entire degree (worth $160/month)',
+    tagline:'Already set up — powers this dashboard\'s storage',
+    baby:'All-in-one kit for building apps. Handles storing data, user accounts, and more. This dashboard uses Appwrite to save your notes across all your devices. Already set up and running.',
+    learn:'Backend development, databases, app architecture',
+    prereqs:'Already active!',
+    whenRedeem:'Already redeemed and running.',
+    clockStart:'Active while student.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes — while student.',
+    tips:'You\'re already using it. As you build more things, Appwrite will power them.',
+    redeem:'Already active!',
+    after:'Build apps with real data storage that works across all devices.'
+  },
+  {
+    id:'heroku', name:'Heroku', emoji:'🚂', type:'Hosting',
+    defaultUrgency:'later', color:'var(--blue)',
+    duration:'$13/month for 24 months (≈₹26,000 total)',
+    tagline:'Beginner-friendly server — easier than DigitalOcean',
+    baby:'DigitalOcean = building your own house from scratch. Heroku = moving into a furnished apartment. Everything is already set up. Just upload your project and it\'s live. Easier starting point for hosting than DigitalOcean.',
+    learn:'App deployment, beginner cloud hosting',
+    prereqs:'Have something to deploy.',
+    whenRedeem:'When you have a project ready to put on the internet.',
+    clockStart:'$13/month credit for 24 months from activation.',
+    expires:'After 24 months.',
+    autoCharge:'May require card. Monitor.',
+    renewable:'No.',
+    tips:'Better starting point than DigitalOcean if you\'re new to hosting. Less setup.',
+    redeem:'education.github.com/pack → Heroku → activate credits',
+    after:'Your projects are live on the internet with minimal setup.'
+  },
+  {
+    id:'mongodb', name:'MongoDB', emoji:'🍃', type:'Hosting',
+    defaultUrgency:'later', color:'var(--blue)',
+    duration:'$50 credit + free courses',
+    tagline:'Database for apps — stores user data, content, stats',
+    baby:'When you build an app that needs to remember things — who signed up, what content exists, what stats look like — you need a database. MongoDB is one of the most popular databases. Think of it as Excel but for apps.',
+    learn:'Database basics, storing and retrieving data',
+    prereqs:'Start building an actual app first.',
+    whenRedeem:'When building an app that needs to store data.',
+    clockStart:'Credit from activation.',
+    expires:'After credit is used.',
+    autoCharge:'After credit runs out.',
+    renewable:'No.',
+    tips:'Use Appwrite (already set up) for simple projects. MongoDB for more complex ones.',
+    redeem:'education.github.com/pack → MongoDB → activate',
+    after:'Build apps that store and retrieve real data.'
+  },
+  {
+    id:'localstack', name:'LocalStack', emoji:'🏠', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'Free with pack',
+    tagline:'Fake cloud on your laptop — test for free before going live',
+    baby:'When building something that needs cloud services you\'d normally have to upload to a real server to test. That costs money and time. LocalStack creates a fake version of those services on your own laptop. Test for free, then deploy when ready.',
+    learn:'Local cloud development, cost-effective testing',
+    prereqs:'Building something that uses cloud services.',
+    whenRedeem:'When working on cloud-based projects.',
+    clockStart:'Active while student.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes.',
+    tips:'Saves real money on cloud costs while developing.',
+    redeem:'education.github.com/pack → LocalStack',
+    after:'Test everything locally for free. Deploy with confidence.'
+  },
+  {
+    id:'datadog', name:'Datadog', emoji:'🐕', type:'Security',
+    defaultUrgency:'later', color:'var(--orange)',
+    duration:'2 years free',
+    tagline:'24/7 monitor for your apps — alerts when anything breaks',
+    baby:'If you build something and people use it — how do you know if it crashes at 3am? Datadog watches your app 24/7 and immediately alerts you if anything goes wrong. Like a security camera that also sends you WhatsApp messages when someone breaks in.',
+    learn:'Infrastructure monitoring, performance tracking',
+    prereqs:'Have something live that people are actually using.',
+    whenRedeem:'When running live apps with real users.',
+    clockStart:'2 years from activation.',
+    expires:'After 2 years.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'Overkill until you have real users. Save it for then.',
+    redeem:'education.github.com/pack → Datadog → 2 years free',
+    after:'Know immediately when anything goes wrong. Fix before users notice.'
+  },
+  {
+    id:'new-relic', name:'New Relic', emoji:'📡', type:'Security',
+    defaultUrgency:'later', color:'var(--orange)',
+    duration:'Free while student (worth $300/month = ₹25,000/month)',
+    tagline:'Most comprehensive monitoring — tracks everything in one dashboard',
+    baby:'Like Datadog but more detailed. Tracks speed, errors, who\'s visiting, how long pages take to load — everything in one place. Worth ₹25,000 per month. Free for you. Use when running serious projects with real traffic.',
+    learn:'Full-stack monitoring, performance optimisation',
+    prereqs:'Have live projects with real traffic.',
+    whenRedeem:'When running multiple serious live projects.',
+    clockStart:'Active while student.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes.',
+    tips:'Probably more than you need early on. Save for when you\'re running multiple client projects.',
+    redeem:'education.github.com/pack → New Relic → student plan',
+    after:'Complete visibility into how everything performs.'
+  },
+  {
+    id:'honeybadger', name:'Honeybadger', emoji:'🍯', type:'Security',
+    defaultUrgency:'later', color:'var(--orange)',
+    duration:'1 year free',
+    tagline:'Alarm bell when something breaks on your website',
+    baby:'If a button on your website stops working at 2am, Honeybadger immediately sends you an email. "Hey, this broke." You fix it before your client even notices. Catching problems before your clients do makes you look incredibly professional.',
+    learn:'Error monitoring, uptime awareness',
+    prereqs:'Have live websites or apps for clients.',
+    whenRedeem:'When managing live websites for clients.',
+    clockStart:'1 year from activation.',
+    expires:'After 1 year.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'Simpler than Sentry — easier to start with. Pick one: Honeybadger or Sentry.',
+    redeem:'education.github.com/pack → Honeybadger → 1 year free',
+    after:'Fix client issues before they notice. Look superhuman at client management.'
+  },
+  {
+    id:'sentry', name:'Sentry', emoji:'🔍', type:'Security',
+    defaultUrgency:'later', color:'var(--orange)',
+    duration:'1 year free',
+    tagline:'Full investigation report when something breaks — more detail than Honeybadger',
+    baby:'Honeybadger says "something broke." Sentry says "here\'s exactly what broke, on what line of code, at what time, for which user, and why." Way more detail. Better for debugging complex issues. Pick ONE — Honeybadger or Sentry, not both.',
+    learn:'Advanced error tracking, debugging',
+    prereqs:'Have live projects running.',
+    whenRedeem:'When running live complex projects.',
+    clockStart:'1 year from activation.',
+    expires:'After 1 year.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'More powerful than Honeybadger but more complex. Start with Honeybadger if you\'re new to monitoring.',
+    redeem:'education.github.com/pack → Sentry → 1 year free',
+    after:'Fix bugs faster. Impress clients with your response time to issues.'
+  },
+  {
+    id:'astra', name:'AstraSecurity', emoji:'🛡️', type:'Security',
+    defaultUrgency:'later', color:'var(--orange)',
+    duration:'6 months free',
+    tagline:'Security guard for websites you manage for clients',
+    baby:'Scans websites for viruses, blocks hackers, alerts you if something suspicious happens. When you manage websites for clients you can say "your website is protected by AstraSecurity" — sounds very professional and builds trust.',
+    learn:'Basic web security, vulnerability scanning',
+    prereqs:'Managing websites for clients.',
+    whenRedeem:'When hosting/managing websites for clients.',
+    clockStart:'6 months from activation.',
+    expires:'After 6 months.',
+    autoCharge:'Check their terms before activating.',
+    renewable:'No.',
+    tips:'Being able to offer "secured and monitored website management" is a premium service add-on.',
+    redeem:'education.github.com/pack → AstraSecurity → 6 months',
+    after:'Offer premium secured website management. Charge more. Clients trust you more.'
+  },
+  {
+    id:'dashlane', name:'Dashlane', emoji:'🗝️', type:'Security',
+    defaultUrgency:'later', color:'var(--orange)',
+    duration:'6 months free',
+    tagline:'Backup password manager — use 1Password instead',
+    baby:'Same as 1Password — stores passwords securely. You already have 1Password from this pack. You only need one password manager. Dashlane is a backup if 1Password doesn\'t work for some reason.',
+    learn:'Password security',
+    prereqs:'Already using 1Password.',
+    whenRedeem:'Only if 1Password stops working for you.',
+    clockStart:'6 months from activation.',
+    expires:'After 6 months.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'Just use 1Password. Dashlane is backup only.',
+    redeem:'education.github.com/pack → Dashlane',
+    after:'Backup secure password storage.'
+  },
+  {
+    id:'dailybot', name:'DailyBot', emoji:'🤝', type:'Productivity',
+    defaultUrgency:'later', color:'var(--cyan)',
+    duration:'6 months free (up to 10 users)',
+    tagline:'Auto-update clients — scales your communication as you grow',
+    baby:'When you have multiple clients you need to update each one regularly. DailyBot sends automatic scheduled check-in messages. As you grow from 1 to 5 clients this becomes really important — you can\'t manually update everyone every day.',
+    learn:'Client communication, automation',
+    prereqs:'Have at least 2-3 paying clients.',
+    whenRedeem:'Once you have 2+ clients.',
+    clockStart:'6 months from activation.',
+    expires:'After 6 months.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'Not useful until you have multiple clients. Don\'t activate early.',
+    redeem:'education.github.com/pack → DailyBot → 6 months',
+    after:'Every client always feels updated. Never drop the ball on communication.'
+  },
+  {
+    id:'popsql', name:'PopSQL', emoji:'🔢', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'Free while student',
+    tagline:'Beautiful interface for working with big data using SQL',
+    baby:'SQL is a language for working with huge amounts of data — like Excel but for millions of rows. PopSQL is a beautiful clean app for writing SQL and sharing results. If you take DataCamp\'s SQL modules, you use your skills here.',
+    learn:'SQL queries, working with large datasets',
+    prereqs:'DataCamp SQL course first.',
+    whenRedeem:'After completing DataCamp SQL content.',
+    clockStart:'Active while student.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes.',
+    tips:'Part of a data stack. Only useful if you go deep into data skills.',
+    redeem:'education.github.com/pack → PopSQL',
+    after:'Handle serious data work for clients professionally.'
+  },
+  {
+    id:'deepnote', name:'Deepnote', emoji:'📓', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'Free while student',
+    tagline:'Data notebooks — present findings beautifully to clients',
+    baby:'Like a Google Doc where you can also run code and show charts right inside it. Data scientists use this to present findings visually. Instead of sending a boring Excel file you send a beautiful interactive document that tells a story with the data.',
+    learn:'Data storytelling, presenting analysis visually',
+    prereqs:'Python or SQL basics first.',
+    whenRedeem:'After learning Python/SQL and doing data work for clients.',
+    clockStart:'Active while student.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes.',
+    tips:'Looks incredibly impressive to clients. When you have the data skills to use it.',
+    redeem:'education.github.com/pack → Deepnote',
+    after:'Deliver data reports that look like they came from a proper data team.'
+  },
+  {
+    id:'zyte', name:'Zyte', emoji:'🕷️', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'Free forever',
+    tagline:'Web scraping robot — auto-collect lead lists',
+    baby:'Want a list of 500 D2C founders in India to pitch? Instead of manually finding each one, Zyte does it automatically. It\'s a robot that browses the internet and collects information. Lead lists are a sellable product on their own.',
+    learn:'Web scraping, data collection, lead generation automation',
+    prereqs:'Basic Python first.',
+    whenRedeem:'After learning Python basics.',
+    clockStart:'Free forever — no rush.',
+    expires:'Never.',
+    autoCharge:'No.',
+    renewable:'Always active.',
+    tips:'Once you learn basic Python this becomes very powerful for outreach.',
+    redeem:'education.github.com/pack → Zyte',
+    after:'Generate lead lists automatically. Supercharge your own outreach. Sell lists to other businesses.'
+  },
+  {
+    id:'jetbrains', name:'JetBrains', emoji:'⚡', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'Free while student (worth ₹8,000/year)',
+    tagline:'Professional code editor — what big company devs use',
+    baby:'Like Microsoft Word but for writing code. JetBrains is the fancy professional version — the one developers at Google and Amazon use. Has specialised tools for Python, JavaScript, and more. Start with VS Code (free for everyone) and move to JetBrains later.',
+    learn:'Professional coding environment, advanced code tools',
+    prereqs:'Learn basics with VS Code first.',
+    whenRedeem:'After you\'re comfortable with basic coding.',
+    clockStart:'Active while student. Renews yearly.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes — renews yearly while student.',
+    tips:'Don\'t start here. VS Code is simpler and free for everyone. Come back to JetBrains when VS Code feels limiting.',
+    redeem:'education.github.com/pack → JetBrains → student license',
+    after:'Code like a professional developer at any company.'
+  },
+  {
+    id:'browserstack', name:'BrowserStack', emoji:'📱', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'1 year free',
+    tagline:'Test your websites on 2000+ real devices without owning them',
+    baby:'When you build a website you need it to look good on every phone, laptop, tablet, and browser. BrowserStack gives you access to 2000+ real devices online. Paste your website link and instantly see how it looks on any device anywhere.',
+    learn:'Cross-device testing, quality assurance',
+    prereqs:'Start building websites for clients first.',
+    whenRedeem:'When building and delivering websites for clients.',
+    clockStart:'1 year from activation.',
+    expires:'After 1 year.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'Very useful when delivering client websites. Ensures no broken layouts on any device.',
+    redeem:'education.github.com/pack → BrowserStack → 1 year',
+    after:'Websites you deliver work perfectly on every device. No embarrassing issues.'
+  },
+  {
+    id:'polypane', name:'Polypane', emoji:'🪟', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'1 year free',
+    tagline:'See your website on phone + tablet + laptop simultaneously',
+    baby:'Instead of testing one screen size at a time, Polypane shows all of them side by side at once. Change something and it updates everywhere instantly. Massive time saver when building and tweaking websites.',
+    learn:'Responsive design testing',
+    prereqs:'Building websites.',
+    whenRedeem:'When actively building websites.',
+    clockStart:'1 year from activation.',
+    expires:'After 1 year.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'Use alongside BrowserStack. Polypane for design work, BrowserStack for final testing.',
+    redeem:'education.github.com/pack → Polypane → 1 year',
+    after:'Build responsive websites way faster.'
+  },
+  {
+    id:'gitkraken', name:'GitKraken', emoji:'🐙', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'6 months free',
+    tagline:'Visual GitHub management — buttons instead of scary commands',
+    baby:'Managing GitHub normally requires typing commands in a black screen. GitKraken makes it all visual — click buttons, drag and drop, see everything clearly. Like the difference between typing commands vs using a file explorer.',
+    learn:'Advanced version control, visual git workflow',
+    prereqs:'Basic GitHub usage first.',
+    whenRedeem:'When managing complex projects with lots of changes.',
+    clockStart:'6 months from activation.',
+    expires:'After 6 months.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'GitHub Desktop (free for everyone) is enough for most things. GitKraken for complex projects.',
+    redeem:'education.github.com/pack → GitKraken → 6 months',
+    after:'Manage complex projects without the command line.'
+  },
+  {
+    id:'tower', name:'Tower', emoji:'🗼', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'Free while student',
+    tagline:'Most advanced git client — for complex multi-project work',
+    baby:'GitHub Desktop is basic git management. GitKraken is intermediate. Tower is the most advanced and powerful version — what professional agencies use when managing many projects simultaneously.',
+    learn:'Professional project management',
+    prereqs:'Comfortable with GitHub Desktop and GitKraken first.',
+    whenRedeem:'When you outgrow other git tools.',
+    clockStart:'Active while student.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes.',
+    tips:'Probably don\'t need this for a very long time. GitHub Desktop → GitKraken → Tower.',
+    redeem:'education.github.com/pack → Tower',
+    after:'Manage complex multi-project development at agency level.'
+  },
+  {
+    id:'xojo', name:'Xojo', emoji:'🖥️', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'Free while student',
+    tagline:'Build desktop and mobile apps visually',
+    baby:'Like Bootstrap Studio (websites by drag and drop) but for desktop and mobile apps. Build a proper application someone downloads and installs. Doesn\'t require deep coding knowledge to get started.',
+    learn:'Desktop/mobile app development',
+    prereqs:'Basic coding concepts first.',
+    whenRedeem:'When you want to build and sell downloadable apps.',
+    clockStart:'Active while student.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes.',
+    tips:'Good for building tools you can sell as one-time products.',
+    redeem:'education.github.com/pack → Xojo',
+    after:'Build and sell downloadable desktop/mobile apps.'
+  },
+  {
+    id:'blockchair', name:'Blockchair', emoji:'₿', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'100,000 free API requests',
+    tagline:'Crypto and blockchain data — only if relevant to you',
+    baby:'If you ever build something that works with Bitcoin, Ethereum, or blockchain data — Blockchair gives you access to all of that data automatically. Very niche. Only relevant if you decide to go into crypto/web3.',
+    learn:'Blockchain data, crypto APIs',
+    prereqs:'Specific crypto/blockchain project in mind.',
+    whenRedeem:'Only if you actively decide to build in crypto/web3.',
+    clockStart:'Requests don\'t expire.',
+    expires:'Never — request based.',
+    autoCharge:'No.',
+    renewable:'No.',
+    tips:'Completely ignore this unless crypto becomes relevant to you.',
+    redeem:'education.github.com/pack → Blockchair',
+    after:'Build crypto-related tools and products.'
+  },
+  {
+    id:'configcat', name:'ConfigCat', emoji:'🎛️', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'Free forever',
+    tagline:'Turn features on/off for specific users — for real products',
+    baby:'When you have a real product with users and want to test a new feature with 10% of them first before showing everyone — that\'s a feature flag. ConfigCat lets you do that without rebuilding anything.',
+    learn:'Feature management, safe product releases',
+    prereqs:'Running a real product with actual users.',
+    whenRedeem:'When you have a real product.',
+    clockStart:'Free forever.',
+    expires:'Never.',
+    autoCharge:'No.',
+    renewable:'Always.',
+    tips:'Very useful once you have a real product. Completely irrelevant before that.',
+    redeem:'education.github.com/pack → ConfigCat',
+    after:'Release features safely. Test before full rollout.'
+  },
+  {
+    id:'workingcopy', name:'WorkingCopy', emoji:'📲', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'Free while student',
+    tagline:'GitHub Desktop for your iPhone — update projects from your phone',
+    baby:'GitHub Desktop on your laptop lets you update your website by clicking buttons. WorkingCopy is the same app but for iPhone. On the go and need to make a quick update to your portfolio? Do it from your phone.',
+    learn:'Mobile git management',
+    prereqs:'iPhone and active GitHub usage.',
+    whenRedeem:'If you have an iPhone and want mobile GitHub access.',
+    clockStart:'Active while student.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes.',
+    tips:'Not essential but very convenient.',
+    redeem:'education.github.com/pack → WorkingCopy → App Store',
+    after:'Update your projects from anywhere.'
+  },
+  {
+    id:'imgbot2', name:'Pageclip Forms', emoji:'📨', type:'Dev Tools',
+    defaultUrgency:'later', color:'var(--yellow)',
+    duration:'Free while student',
+    tagline:'Advanced form handling for websites',
+    baby:'More advanced version of basic form handling. When you start building more complex websites with multiple forms — contact forms, waitlist signups, feedback forms — this handles all of them.',
+    learn:'Advanced form management',
+    prereqs:'Building complex websites.',
+    whenRedeem:'When building websites with multiple forms.',
+    clockStart:'Active while student.',
+    expires:'When student status ends.',
+    autoCharge:'No.',
+    renewable:'Yes.',
+    tips:'Basic Pageclip is probably enough for a while.',
+    redeem:'education.github.com/pack → Pageclip advanced features',
+    after:'Handle complex form submissions professionally.'
+  }
 ];
 
+// ── TYPE COLORS ──────────────────────────────────────────
 const TYPE_COLORS = {
   'Learning':'var(--purple)','Design':'var(--pink)','Hosting':'var(--blue)',
   'Payments':'var(--green)','Security':'var(--orange)','Productivity':'var(--cyan)',
   'Dev Tools':'var(--yellow)','Domain':'var(--red)'
 };
 
+// ── STATE ────────────────────────────────────────────────
 let activeFilter = 'all';
 let activeSearch = '';
 let savedData = {};
@@ -275,8 +1555,8 @@ let modalLinks = [];
 let modalUrgency = null;
 let modalStatus = null;
 
-// ── APPWRITE — FIXED ─────────────────────────────────────
-async function awFetch(path, method = 'GET', body = null) {
+// ── APPWRITE ─────────────────────────────────────────────
+async function awFetch(path, method='GET', body=null) {
   const opts = {
     method,
     headers: { 'X-Appwrite-Project': AW.project, 'Content-Type': 'application/json' }
@@ -289,74 +1569,47 @@ async function awFetch(path, method = 'GET', body = null) {
 async function loadData() {
   try {
     const res = await awFetch(`/databases/${AW.db}/collections/${AW.col}/documents?queries[]=limit(100)`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     if (data.documents) {
       data.documents.forEach(doc => {
-        const raw = doc.note || '';
-        const parts = raw.split('|||URGENCY:');
-        const note = parts[0];
-        const urgency = parts.length === 2 ? parts[1].trim() : null;
         savedData[doc.$id] = {
-          note,
+          note: doc.note || '',
           links: tryParse(doc.links, []),
           status: doc.status || 'Not Started',
-          urgency
+          urgency: doc.note ? (tryParse(doc.note.split('|||')[1], null)) : null
         };
+        // urgency stored separately in note field with separator
+        const parts = (doc.note || '').split('|||URGENCY:');
+        if (parts.length === 2) {
+          savedData[doc.$id].note = parts[0];
+          savedData[doc.$id].urgency = parts[1].trim();
+        }
       });
     }
-  } catch (e) {
-    console.error('Load error:', e);
-  }
+  } catch(e) { console.error('Load error:', e); }
   updateCounts();
   renderGrid();
 }
 
-// FIXED: correct body structure for both PATCH and POST
 async function saveDoc(toolId, note, links, status, urgency) {
+  // Store urgency in note field with separator
   const noteWithUrgency = urgency ? `${note}|||URGENCY:${urgency}` : note;
-  const docData = {
-    note: noteWithUrgency,
-    links: JSON.stringify(links),
-    status: status
-  };
-
-  // Try PATCH first (update existing)
-  const patchRes = await awFetch(
-    `/databases/${AW.db}/collections/${AW.col}/documents/${toolId}`,
-    'PATCH',
-    { data: docData }
-  );
-
-  if (patchRes.status === 404) {
-    // Doesn't exist yet — POST to create it
-    // FIXED: data goes inside a "data" key, not spread at top level
-    const postRes = await awFetch(
-      `/databases/${AW.db}/collections/${AW.col}/documents`,
-      'POST',
-      {
-        documentId: toolId,
-        data: docData,
-        permissions: ['read("any")', 'write("any")']
-      }
-    );
-    if (!postRes.ok) {
-      const err = await postRes.json();
-      throw new Error(err.message || `Create failed: ${postRes.status}`);
+  const body = { data: { note: noteWithUrgency, links: JSON.stringify(links), status } };
+  try {
+    let res = await awFetch(`/databases/${AW.db}/collections/${AW.col}/documents/${toolId}`, 'PATCH', body);
+    if (res.status === 404) {
+      res = await awFetch(`/databases/${AW.db}/collections/${AW.col}/documents`, 'POST',
+        { documentId: toolId, ...body });
     }
-  } else if (!patchRes.ok) {
-    const err = await patchRes.json();
-    throw new Error(err.message || `Update failed: ${patchRes.status}`);
-  }
-
-  // Update local cache immediately so UI reflects change
-  savedData[toolId] = { note, links, status, urgency };
+    savedData[toolId] = { note, links, status, urgency };
+  } catch(e) { console.error('Save error:', e); }
 }
 
 function tryParse(str, fallback) {
   try { return JSON.parse(str); } catch { return fallback; }
 }
 
+// ── RENDER ───────────────────────────────────────────────
 function getUrgency(tool) {
   return (savedData[tool.id] && savedData[tool.id].urgency) || tool.defaultUrgency;
 }
@@ -375,6 +1628,7 @@ function updateCounts() {
 function renderGrid() {
   const grid = document.getElementById('grid');
   let list = [...TOOLS];
+
   if (activeFilter !== 'all') {
     if (['now','soon','later'].includes(activeFilter)) {
       list = list.filter(t => getUrgency(t) === activeFilter);
@@ -384,6 +1638,7 @@ function renderGrid() {
       list = list.filter(t => t.type === activeFilter);
     }
   }
+
   if (activeSearch) {
     const q = activeSearch.toLowerCase();
     list = list.filter(t =>
@@ -393,8 +1648,14 @@ function renderGrid() {
       t.baby.toLowerCase().includes(q)
     );
   }
+
   document.getElementById('countBadge').textContent = `${list.length} tools`;
-  if (!list.length) { grid.innerHTML = '<div class="empty">No tools found</div>'; return; }
+
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty">No tools found</div>';
+    return;
+  }
+
   grid.innerHTML = list.map(t => {
     const urg = getUrgency(t);
     const stat = getStatus(t.id);
@@ -405,12 +1666,12 @@ function renderGrid() {
       <div class="card-accent" style="background:${t.color}"></div>
       <div class="card-header">
         <div class="card-emoji">${t.emoji}</div>
-        <div class="card-urgency u-${urg}">${urg==='now'?'🔴 Now':urg==='soon'?'🟡 Soon':'🔵 Later'}</div>
+        <div class="card-urgency u-${urg}">${urg === 'now' ? '🔴 Now' : urg === 'soon' ? '🟡 Soon' : '🔵 Later'}</div>
       </div>
       <div class="card-type" style="background:${tc}18;color:${tc}">${t.type}</div>
       <div class="card-name">${t.name}</div>
       <div class="card-tagline">${t.tagline}</div>
-      ${hasWarning?'<div class="card-warn">⚠️ Read warnings before activating</div>':''}
+      ${hasWarning ? `<div class="card-warn">⚠️ Read warnings before activating</div>` : ''}
       <div class="card-footer">
         <div class="card-duration">${t.duration.split('(')[0].trim()}</div>
         <div class="status-pip ${statClass}" title="${stat}"></div>
@@ -419,6 +1680,7 @@ function renderGrid() {
   }).join('');
 }
 
+// ── FILTER / SEARCH ──────────────────────────────────────
 function setFilter(f, btn) {
   activeFilter = f;
   document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
@@ -426,8 +1688,12 @@ function setFilter(f, btn) {
   renderGrid();
 }
 
-function doSearch(q) { activeSearch = q; renderGrid(); }
+function doSearch(q) {
+  activeSearch = q;
+  renderGrid();
+}
 
+// ── MODAL ────────────────────────────────────────────────
 function openModal(toolId) {
   const t = TOOLS.find(x => x.id === toolId);
   if (!t) return;
@@ -442,32 +1708,66 @@ function openModal(toolId) {
   document.getElementById('mTagline').textContent = t.tagline;
 
   const tc = TYPE_COLORS[t.type] || '#555';
-  const warnWhen = t.whenRedeem.includes('⚠️') || t.whenRedeem.includes('URGENT') || t.whenRedeem.includes('NOW');
   document.getElementById('mInfoGrid').innerHTML = `
-    <div class="ib"><div class="ib-label">⏳ How Long</div><div class="ib-val highlight">${t.duration}</div></div>
-    <div class="ib"><div class="ib-label">🏷️ Category</div><div class="ib-val" style="color:${tc}">${t.type}</div></div>
-    <div class="ib full"><div class="ib-label">👶 What Is It</div><div class="ib-val">${t.baby}</div></div>
-    <div class="ib"><div class="ib-label">📖 What You Learn</div><div class="ib-val">${t.learn}</div></div>
-    <div class="ib"><div class="ib-label">📋 Prerequisites</div><div class="ib-val">${t.prereqs}</div></div>
-    <div class="ib full ${warnWhen?'warn':''}"><div class="ib-label ${warnWhen?'warn-label':''}">🎯 When To Redeem</div><div class="ib-val">${t.whenRedeem}</div></div>
-    <div class="ib"><div class="ib-label">⏰ When Clock Starts</div><div class="ib-val">${t.clockStart}</div></div>
-    <div class="ib"><div class="ib-label">📅 What Happens When It Expires</div><div class="ib-val">${t.expires}</div></div>
-    <div class="ib"><div class="ib-label">💳 Auto-Charged After?</div><div class="ib-val ${t.autoCharge==='No.'||t.autoCharge==='No'?'green':'red'}">${t.autoCharge}</div></div>
-    <div class="ib"><div class="ib-label">🔄 Renewable?</div><div class="ib-val">${t.renewable}</div></div>
-    <div class="ib full tip"><div class="ib-label tip-label">💡 Tips & Traps To Know First</div><div class="ib-val">${t.tips}</div></div>
-    <div class="ib full"><div class="ib-label">🔑 How To Redeem</div><div class="ib-val">${t.redeem}</div></div>
-    <div class="ib full"><div class="ib-label">🚀 After This, You Can</div><div class="ib-val">${t.after}</div></div>
+    <div class="ib">
+      <div class="ib-label">⏳ How Long</div>
+      <div class="ib-val highlight">${t.duration}</div>
+    </div>
+    <div class="ib">
+      <div class="ib-label">🏷️ Category</div>
+      <div class="ib-val" style="color:${tc}">${t.type}</div>
+    </div>
+    <div class="ib full">
+      <div class="ib-label">👶 What Is It</div>
+      <div class="ib-val">${t.baby}</div>
+    </div>
+    <div class="ib">
+      <div class="ib-label">📖 What You Learn</div>
+      <div class="ib-val">${t.learn}</div>
+    </div>
+    <div class="ib">
+      <div class="ib-label">📋 Prerequisites</div>
+      <div class="ib-val">${t.prereqs}</div>
+    </div>
+    <div class="ib full ${t.whenRedeem.includes('⚠️') || t.whenRedeem.includes('URGENT') || t.whenRedeem.includes('NOW') ? 'warn' : ''}">
+      <div class="ib-label ${t.whenRedeem.includes('⚠️') || t.whenRedeem.includes('URGENT') ? 'warn-label' : ''}">🎯 When To Redeem</div>
+      <div class="ib-val">${t.whenRedeem}</div>
+    </div>
+    <div class="ib">
+      <div class="ib-label">⏰ When Clock Starts</div>
+      <div class="ib-val">${t.clockStart}</div>
+    </div>
+    <div class="ib">
+      <div class="ib-label">📅 What Happens When It Expires</div>
+      <div class="ib-val">${t.expires}</div>
+    </div>
+    <div class="ib">
+      <div class="ib-label">💳 Auto-Charged After?</div>
+      <div class="ib-val ${t.autoCharge === 'No.' || t.autoCharge === 'No' ? 'green' : 'red'}">${t.autoCharge}</div>
+    </div>
+    <div class="ib">
+      <div class="ib-label">🔄 Renewable?</div>
+      <div class="ib-val">${t.renewable}</div>
+    </div>
+    <div class="ib full tip">
+      <div class="ib-label tip-label">💡 Tips & Traps To Know First</div>
+      <div class="ib-val">${t.tips}</div>
+    </div>
+    <div class="ib full">
+      <div class="ib-label">🔑 How To Redeem</div>
+      <div class="ib-val">${t.redeem}</div>
+    </div>
+    <div class="ib full">
+      <div class="ib-label">🚀 After This, You Can</div>
+      <div class="ib-val">${t.after}</div>
+    </div>
   `;
 
   document.getElementById('mNotes').value = d.note || '';
   renderUrgencyBtns();
   renderStatusBtns();
   renderSavedLinks();
-  const msg = document.getElementById('saveMsg');
-  msg.textContent = '';
-  msg.className = 'save-msg';
-  document.getElementById('saveBtn').disabled = false;
-  document.getElementById('saveBtn').textContent = 'Save Everything';
+  document.getElementById('saveMsg').classList.remove('show');
   document.getElementById('overlay').classList.add('open');
 }
 
@@ -488,9 +1788,15 @@ function renderStatusBtns() {
   });
 }
 
-// These now just update local state + re-render buttons — save happens on "Save Everything"
-function setUrgency(u) { modalUrgency = u; renderUrgencyBtns(); }
-function setStatus(s) { modalStatus = s; renderStatusBtns(); }
+function setUrgency(u) {
+  modalUrgency = u;
+  renderUrgencyBtns();
+}
+
+function setStatus(s) {
+  modalStatus = s;
+  renderStatusBtns();
+}
 
 function renderSavedLinks() {
   const c = document.getElementById('savedLinks');
@@ -513,37 +1819,31 @@ function addLink() {
   renderSavedLinks();
 }
 
-function removeLink(i) { modalLinks.splice(i, 1); renderSavedLinks(); }
+function removeLink(i) {
+  modalLinks.splice(i, 1);
+  renderSavedLinks();
+}
 
 async function saveData() {
   if (!currentTool) return;
-  const btn = document.getElementById('saveBtn');
-  const msg = document.getElementById('saveMsg');
-  btn.disabled = true;
-  btn.textContent = 'Saving…';
-  msg.textContent = '';
-  msg.className = 'save-msg';
-
   const note = document.getElementById('mNotes').value;
-  try {
-    await saveDoc(currentTool.id, note, modalLinks, modalStatus, modalUrgency);
-    updateCounts();
-    renderGrid();
-    msg.textContent = '✓ Saved to Appwrite!';
-    msg.className = 'save-msg ok show';
-    setTimeout(() => { msg.className = 'save-msg ok'; }, 3000);
-  } catch (e) {
-    console.error(e);
-    msg.textContent = '✗ Save failed — open console for details';
-    msg.className = 'save-msg err show';
-  }
-  btn.disabled = false;
-  btn.textContent = 'Save Everything';
+  await saveDoc(currentTool.id, note, modalLinks, modalStatus, modalUrgency);
+  updateCounts();
+  renderGrid();
+  const msg = document.getElementById('saveMsg');
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 2500);
 }
 
-function maybeClose(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
-function closeModal() { document.getElementById('overlay').classList.remove('open'); currentTool = null; }
+function maybeClose(e) {
+  if (e.target === document.getElementById('overlay')) closeModal();
+}
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  currentTool = null;
+}
 
+// ── INIT ─────────────────────────────────────────────────
 loadData();
 </script>
 </body>
